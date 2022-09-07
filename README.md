@@ -32,14 +32,13 @@ classDiagram
     class VirtualMachine {
         -String Id        
         -Status Status
-        -String UserId
         -VirtualPhysicalMachine PhysicalMachineId
     }
 
     class VirtualPhysicalMachine {
-        -String Id
-        -String VirtualMachineId
-        -String PhysicalMachine
+        -String VirtualMachineId : chave-composta
+        -String PhysicalMachineId : chave-composta
+        -String UserId : chave-composta
         -LocalDateTime StartedDate
         -LocalDateTime CreatedDate
         -LocalDateTime UpdatedAt
