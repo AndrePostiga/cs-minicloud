@@ -1,9 +1,14 @@
 package domain.MachineAggregate.Entities;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "cpus")
+@DynamicInsert
+@DynamicUpdate
 public class CPU {
 
     public CPU() {}
