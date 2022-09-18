@@ -31,20 +31,25 @@ public class CPU {
 
     private Integer cache;
 
+    @Column(name = "clock_frequency")
     private double clockFrequency;
 
     public Long getId() {
         return id;
     }
+
     public ArchitectureEnum getArchitecture() {
         return architecture;
     }
+
     public Integer getCores() {
         return cores;
     }
+
     public Integer getCache() {
         return cache;
     }
+
     public double getClockFrequency() {
         return clockFrequency;
     }
