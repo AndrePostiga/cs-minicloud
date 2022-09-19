@@ -1,10 +1,12 @@
 package domain.MachineAggregate.Entities;
 
+import domain.MachineAggregate.Entities.Enumerations.PhysicalMachineStatusEnum;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "physical_machine")
+@Table(name = "PhysicalMachines")
 public class PhysicalMachine extends Machine{
 
     public PhysicalMachine() {}
@@ -15,15 +17,11 @@ public class PhysicalMachine extends Machine{
     @Enumerated(EnumType.STRING)
     private PhysicalMachineStatusEnum status;
 
-    @Column(name = "remain_memory_in_bytes")
     private Long remainMemoryInBytes;
 
-    @Column(name = "remain_ssd_in_bytes")
     private Long remainSsdInBytes;
 
-    @Column(name = "remain_hd_in_bytes")
     private Long remainHdInBytes;
 
-    @Column(name = "remain_cpu_cores_in_bytes")
     private int remainCpuCores;
 }

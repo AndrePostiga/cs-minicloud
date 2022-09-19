@@ -1,4 +1,4 @@
-package domain.MachineAggregate.Entities;
+package domain.MachineAggregate.Entities.Enumerations;
 
 public enum OperationalSystemEnum {
     Windows,

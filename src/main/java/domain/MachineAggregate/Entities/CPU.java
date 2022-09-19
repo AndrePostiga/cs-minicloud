@@ -1,12 +1,13 @@
 package domain.MachineAggregate.Entities;
 
+import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cpus")
+@Table(name = "CPUs")
 @DynamicInsert
 @DynamicUpdate
 public class CPU {
@@ -31,7 +32,6 @@ public class CPU {
 
     private Integer cache;
 
-    @Column(name = "clock_frequency")
     private double clockFrequency;
 
     public Long getId() {

@@ -1,12 +1,11 @@
 package domain.MachineAggregate.Entities;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Entity
-@Table(name = "virtual_physical_machine_allocation")
+@Table(name = "VirtualPhysicalMachineAllocation")
 public class VirtualPhysicalMachineAllocation {
 
     public VirtualPhysicalMachineAllocation() {}
@@ -32,13 +31,10 @@ public class VirtualPhysicalMachineAllocation {
 
     public Long userId;
 
-    @Column(name = "started_date")
     public LocalDateTime startedDate;
 
-    @Column(name = "created_date")
     public LocalDateTime createdDate;
 
-    @Column(name = "updated_at")
     public LocalDateTime updatedAt;
 
     public VirtualMachine getVirtualMachine() {

@@ -1,5 +1,5 @@
 import corejava.Console;
-import domain.MachineAggregate.Entities.ArchitectureEnum;
+import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.CPU;
 import domain.MachineAggregate.Daos.CpuDAO;
 import infrastructure.database.DaoFactory;

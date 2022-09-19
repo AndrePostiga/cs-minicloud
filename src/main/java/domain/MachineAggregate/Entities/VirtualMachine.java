@@ -1,9 +1,11 @@
 package domain.MachineAggregate.Entities;
 
+import domain.MachineAggregate.Entities.Enumerations.VirtualMachineStatusEnum;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "virtual_machine")
+@Table(name = "VirtualMachines")
 public class VirtualMachine extends Machine{
 
     public VirtualMachine() {}
