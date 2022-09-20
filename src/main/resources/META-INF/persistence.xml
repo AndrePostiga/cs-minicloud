@@ -9,6 +9,7 @@
     <persistence-unit name="core-prod" transaction-type="RESOURCE_LOCAL">
         <properties>
             <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.physical_naming_strategy" value="infrastructure.database.CustomPhysicalNamingStrategy"/>
 
             <property name="javax.persistence.jdbc.driver"   value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"      value="jdbc:mysql://localhost:3307/minicloud?autoReconnect=true&amp;useSSL=false&amp;useTimezone=true&amp;serverTimezone=UTC" />

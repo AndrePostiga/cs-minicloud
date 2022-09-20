@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Entity
-@Table(name = "VirtualPhysicalMachineAllocation")
+@Table(name = "VirtualPhysicalMachineAllocations")
 public class VirtualPhysicalMachineAllocation {
 
     public VirtualPhysicalMachineAllocation() {}
