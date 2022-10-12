@@ -11,10 +11,12 @@ public class JPAUtil {
 	private static EntityManagerFactory emf;
 	private static final ThreadLocal<EntityManager> threadEntityManager = new ThreadLocal<EntityManager>();
 	private static final ThreadLocal<EntityTransaction> threadTransaction = new ThreadLocal<EntityTransaction>();
+	private static final ThreadLocal<Integer> commitCounter = new ThreadLocal<Integer>();
 
 	static {
 		try {
 			emf = Persistence.createEntityManagerFactory("exercicio");
+			commitCounter.set(0);
 		} catch (Throwable e) {
 			e.printStackTrace();
 			System.out.println(">>>>>>>>>> Mensagem de erro: " + e.getMessage());
@@ -25,7 +27,9 @@ public class JPAUtil {
 	public static void beginTransaction() { // System.out.println("Vai criar transacao");
 
 		EntityTransaction tx = threadTransaction.get();
+		commitCounter.set(commitCounter.get() + 1);
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Entrou em beginTransaction()");
+
 		try {
 			if (tx == null) {
 				tx = getEntityManager().getTransaction();
@@ -58,12 +62,21 @@ public class JPAUtil {
 	public static void commitTransaction() {
 		EntityTransaction tx = threadTransaction.get();
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Entrou em commitTransaction");
+
 		try {
-			if (tx != null && tx.isActive()) {
-				tx.commit();
-				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comitou transacao");
+			if (commitCounter.get() == 1) {
+
+				if (tx != null && tx.isActive()) {
+					tx.commit();
+					System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comitou transacao");
+					commitCounter.set(0);
+				}
+				threadTransaction.set(null);
 			}
-			threadTransaction.set(null);
+			else {
+				commitCounter.set(commitCounter.get() - 1);
+			}
+
 		} catch (RuntimeException ex) {
 			try {
 				rollbackTransaction();
@@ -80,6 +93,7 @@ public class JPAUtil {
 		EntityTransaction tx = threadTransaction.get();
 		try {
 			threadTransaction.set(null);
+			commitCounter.set(0);
 			if (tx != null && tx.isActive()) {
 				tx.rollback();
 			}
@@ -91,6 +105,8 @@ public class JPAUtil {
 	}
 
 	public static void closeEntityManager() { // System.out.println("Vai fechar sessão");
+		if (commitCounter.get() > 0)
+			return;
 
 		try {
 			EntityManager s = threadEntityManager.get();

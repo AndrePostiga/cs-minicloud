@@ -14,210 +14,185 @@ import modelo.Movimento;
 import util.JPAUtil;
 
 public class ContaAppService {
-	private static ContaDAO contaDAO = FabricaDeDAOs.getDAO(ContaDAO.class);
-	private static MovimentoDAO movimentoDAO = FabricaDeDAOs.getDAO(MovimentoDAO.class);
-	
-	public void transfereValor(Conta contaDebitada, Conta contaCreditada, double valor, Calendar hoje)
-			throws ContaNaoEncontradaException {
-		try {
-			JPAUtil.beginTransaction();
-			
-			if (contaDebitada.getId() < contaCreditada.getId()) {          //        t1       t2    
-				debita(contaDebitada, valor, hoje);						   //      d 101     c 101
-				credita(contaCreditada, valor, hoje);                      //      c 102     d 102
-			}
-			else {
-				credita(contaCreditada, valor, hoje);
-				debita(contaDebitada, valor, hoje);
-			}
+    private static ContaDAO contaDAO = FabricaDeDAOs.getDAO(ContaDAO.class);
+    private static MovimentoDAO movimentoDAO = FabricaDeDAOs.getDAO(MovimentoDAO.class);
 
-//			Conta umaConta;
-//			try {
-//				umaConta = contaDAO.recuperaUmaContaComLock(contaDebitada.getId());
-//				umaConta.debita(valor);
-//				Movimento umMovimento = new Movimento(valor, hoje, "D", contaDebitada);
-//				movimentoDAO.inclui(umMovimento);
-//			} catch (ObjetoNaoEncontradoException e) {
-//				JPAUtil.rollbackTransaction();
-//				throw new ContaNaoEncontradaException(
-//					"Conta debitada número " + contaDebitada.getId() + " não encontrada");
-//			}
-//
-//			try {
-//				umaConta = contaDAO.recuperaUmaContaComLock(contaCreditada.getId());
-//				umaConta.credita(valor);
-//				Movimento umMovimento = new Movimento(valor, hoje, "C", contaCreditada);
-//				movimentoDAO.inclui(umMovimento);
-//			} catch (ObjetoNaoEncontradoException e) {
-//				JPAUtil.rollbackTransaction();
-//				throw new ContaNaoEncontradaException(
-//					"Conta creditada número " + contaCreditada.getId() + " não encontrada");
-//			}
+    public void transfereValor(Conta contaDebitada, Conta contaCreditada, double valor, Calendar hoje) throws ContaNaoEncontradaException {
+        try {
+            JPAUtil.beginTransaction();
 
-			JPAUtil.commitTransaction();
-		} catch (InfraestruturaException e) {
-			try {
-				JPAUtil.rollbackTransaction();
-			} catch (InfraestruturaException ie) {
-			}
+            if (contaDebitada.getId() < contaCreditada.getId()) {          //        t1       t2
+                debita(contaDebitada, valor, hoje);                           //      d 101     c 101
+                credita(contaCreditada, valor, hoje);                      //      c 102     d 102
+            } else {
+                credita(contaCreditada, valor, hoje);
+                debita(contaDebitada, valor, hoje);
+            }
 
-			throw e;
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+            JPAUtil.commitTransaction();
+        } catch (InfraestruturaException e) {
+            try {
+                JPAUtil.rollbackTransaction();
+            } catch (InfraestruturaException ie) {
+            }
 
-	public void debita(Conta conta, double valor, Calendar hoje) throws ContaNaoEncontradaException {
-		try {
-			JPAUtil.beginTransaction();
+            throw e;
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
 
-			Conta umaConta = contaDAO.recuperaUmaContaComLock(conta.getId());
+    public void debita(Conta conta, double valor, Calendar hoje) throws ContaNaoEncontradaException {
+        try {
+            JPAUtil.beginTransaction();
 
-			umaConta.debita(valor);
+            Conta umaConta = contaDAO.recuperaUmaContaComLock(conta.getId());
 
-			Movimento umMovimento = new Movimento(valor, hoje, "D", umaConta);
-			
-			movimentoDAO.inclui(umMovimento);
-			
-			JPAUtil.commitTransaction();
+            umaConta.debita(valor);
 
-		} catch (ObjetoNaoEncontradoException e) {
-			JPAUtil.rollbackTransaction();
+            Movimento umMovimento = new Movimento(valor, hoje, "D", umaConta);
 
-			throw new ContaNaoEncontradaException("Conta debitada número " + conta.getId() + " não encontrada");
-		} catch (InfraestruturaException e) {
-			try {
-				JPAUtil.rollbackTransaction();
-			} catch (InfraestruturaException ie) {
-			}
+            movimentoDAO.inclui(umMovimento);
 
-			throw e;
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+            JPAUtil.commitTransaction();
 
-	public void credita(Conta conta, double valor, Calendar hoje) throws ContaNaoEncontradaException {
-		try {
-			JPAUtil.beginTransaction();
+        } catch (ObjetoNaoEncontradoException e) {
+            JPAUtil.rollbackTransaction();
 
-			Conta umaConta = contaDAO.recuperaUmaContaComLock(conta.getId());
+            throw new ContaNaoEncontradaException("Conta debitada número " + conta.getId() + " não encontrada");
+        } catch (InfraestruturaException e) {
+            try {
+                JPAUtil.rollbackTransaction();
+            } catch (InfraestruturaException ie) {
+            }
 
-			umaConta.credita(valor);
+            throw e;
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
 
-			Movimento umMovimento = new Movimento(valor, hoje, "C", umaConta);
-			
-			movimentoDAO.inclui(umMovimento);
+    public void credita(Conta conta, double valor, Calendar hoje) throws ContaNaoEncontradaException {
+        try {
+            JPAUtil.beginTransaction();
 
-			JPAUtil.commitTransaction();
-		
-		} catch (ObjetoNaoEncontradoException e) {
-			JPAUtil.rollbackTransaction();
+            Conta umaConta = contaDAO.recuperaUmaContaComLock(conta.getId());
 
-			throw new ContaNaoEncontradaException("Conta creditada " + conta.getId() + " não encontrada");
-		} catch (InfraestruturaException e) {
-			try {
-				JPAUtil.rollbackTransaction();
-			} catch (InfraestruturaException ie) {
-			}
+            umaConta.credita(valor);
 
-			throw e;
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+            Movimento umMovimento = new Movimento(valor, hoje, "C", umaConta);
 
-	public long inclui(Conta umConta) {
-		try {
-			// NENHUMA VALIDAÇÃO ESTÁ SENDO REALIZADA AQUI!!!
+            movimentoDAO.inclui(umMovimento);
 
-			JPAUtil.beginTransaction();
+            JPAUtil.commitTransaction();
 
-			long numero = contaDAO.inclui(umConta);
+        } catch (ObjetoNaoEncontradoException e) {
+            JPAUtil.rollbackTransaction();
 
-			JPAUtil.commitTransaction();
+            throw new ContaNaoEncontradaException("Conta creditada " + conta.getId() + " não encontrada");
+        } catch (InfraestruturaException e) {
+            try {
+                JPAUtil.rollbackTransaction();
+            } catch (InfraestruturaException ie) {
+            }
 
-			return numero;
-		} catch (InfraestruturaException e) {
-			try {
-				JPAUtil.rollbackTransaction();
-			} catch (InfraestruturaException ie) {
-			}
+            throw e;
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
 
-			throw e;
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+    public long inclui(Conta umConta) {
+        try {
+            // NENHUMA VALIDAÇÃO ESTÁ SENDO REALIZADA AQUI!!!
 
-	public void altera(Conta conta) throws ContaNaoEncontradaException {
-		try {
-			JPAUtil.beginTransaction();
+            JPAUtil.beginTransaction();
 
-			// O objeto recuperado é inserido na lista de objetos monitorados do entity manager.
-			contaDAO.recuperaUmaContaComLock(conta.getId());
+            long numero = contaDAO.inclui(umConta);
 
-			contaDAO.altera(conta);
+            JPAUtil.commitTransaction();
 
-			JPAUtil.commitTransaction();
-		} catch (ObjetoNaoEncontradoException e) {
-			JPAUtil.rollbackTransaction();
+            return numero;
+        } catch (InfraestruturaException e) {
+            try {
+                JPAUtil.rollbackTransaction();
+            } catch (InfraestruturaException ie) {
+            }
 
-			throw new ContaNaoEncontradaException("Conta não encontrada");
-		} catch (InfraestruturaException e) {
-			try {
-				JPAUtil.rollbackTransaction();
-			} catch (InfraestruturaException ie) {
-			}
+            throw e;
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
 
-			throw e;
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+    public void altera(Conta conta) throws ContaNaoEncontradaException {
+        try {
+            JPAUtil.beginTransaction();
 
-	public void exclui(long numero) throws ContaNaoEncontradaException {
-		try {
-			JPAUtil.beginTransaction();
+            // O objeto recuperado é inserido na lista de objetos monitorados do entity manager.
+            contaDAO.recuperaUmaContaComLock(conta.getId());
 
-			contaDAO.exclui(numero);
+            contaDAO.altera(conta);
 
-			JPAUtil.commitTransaction();
-		} catch (ObjetoNaoEncontradoException e) {
-			JPAUtil.rollbackTransaction();
+            JPAUtil.commitTransaction();
+        } catch (ObjetoNaoEncontradoException e) {
+            JPAUtil.rollbackTransaction();
 
-			throw new ContaNaoEncontradaException("Conta não encontrado");
-		} catch (InfraestruturaException e) {
-			try {
-				JPAUtil.rollbackTransaction();
-			} catch (InfraestruturaException ie) {
-			}
+            throw new ContaNaoEncontradaException("Conta não encontrada");
+        } catch (InfraestruturaException e) {
+            try {
+                JPAUtil.rollbackTransaction();
+            } catch (InfraestruturaException ie) {
+            }
 
-			throw e;
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+            throw e;
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
 
-	public Conta recuperaUmaConta(long numero) throws ContaNaoEncontradaException {
-		try {
-			Conta umConta = contaDAO.recuperaUmaConta(numero);
+    public void exclui(long numero) throws ContaNaoEncontradaException {
+        try {
+            JPAUtil.beginTransaction();
 
-			return umConta;
-		} catch (ObjetoNaoEncontradoException e) {
-			throw new ContaNaoEncontradaException("Conta não encontrada");
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+            contaDAO.exclui(numero);
 
-	public List<Conta> recuperaContas() {
-		try {
-			List<Conta> contas = contaDAO.recuperaContas();
+            JPAUtil.commitTransaction();
+        } catch (ObjetoNaoEncontradoException e) {
+            JPAUtil.rollbackTransaction();
 
-			return contas;
-		} finally {
-			JPAUtil.closeEntityManager();
-		}
-	}
+            throw new ContaNaoEncontradaException("Conta não encontrado");
+        } catch (InfraestruturaException e) {
+            try {
+                JPAUtil.rollbackTransaction();
+            } catch (InfraestruturaException ie) {
+            }
+
+            throw e;
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
+
+    public Conta recuperaUmaConta(long numero) throws ContaNaoEncontradaException {
+        try {
+            Conta umConta = contaDAO.recuperaUmaConta(numero);
+
+            return umConta;
+        } catch (ObjetoNaoEncontradoException e) {
+            throw new ContaNaoEncontradaException("Conta não encontrada");
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
+
+    public List<Conta> recuperaContas() {
+        try {
+            List<Conta> contas = contaDAO.recuperaContas();
+
+            return contas;
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+    }
 }
