@@ -1,6 +1,7 @@
 # cs-minicloud
 Serviço em Java + JPA + Spring da disciplina TCC00312 - PROJETO DE SOFTWARE da Universidade Federal Fluminense.
 
+### Trabalho 01 - Definição do Diagrama de Classes
 UML V2.0
 ```mermaid
 classDiagram   
