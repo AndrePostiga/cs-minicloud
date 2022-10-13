@@ -26,12 +26,16 @@ public class CPU {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ArchitectureEnum architecture;
 
+    @Column(nullable = false)
     private Integer cores;
 
+    @Column(nullable = false)
     private Integer cache;
 
+    @Column(nullable = false)
     private double clockFrequency;
 
     public Long getId() {
