@@ -7,8 +7,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: banco
     ports:
       - "3306:3306"
     volumes:
       - /mnt/c/Users/andre/volumes/mysql:/banco.sql
+      - ./outros/schema.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./outros/data.sql:/docker-entrypoint-initdb.d/2.sql
