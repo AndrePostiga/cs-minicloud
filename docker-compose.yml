@@ -7,8 +7,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: minicloud
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
-      - /mnt/c/Users/andre/volumes/mysql:/minicloud.sql
+      - /mnt/c/Users/andre/volumes/mysql:/minicloud.sql-
+      - ./sql-scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./sql-scripts/data.sql:/docker-entrypoint-initdb.d/2.sql
