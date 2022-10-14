@@ -38,6 +38,9 @@ public class CPU {
     @Column(nullable = false)
     private double clockFrequency;
 
+    @Version
+    private int version;
+
     public Long getId() {
         return id;
     }
@@ -58,6 +61,10 @@ public class CPU {
         return clockFrequency;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
     public void setArchitecture(ArchitectureEnum architecture) {
         this.architecture = architecture;
     }
@@ -74,6 +81,10 @@ public class CPU {
         this.clockFrequency = clockFrequency;
     }
 
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     @Override
     public String toString() {
         return "CPU{" +
@@ -82,6 +93,7 @@ public class CPU {
                 ", cores=" + cores +
                 ", cache=" + cache +
                 ", clockFrequency=" + clockFrequency +
+                ", version=" + version +
                 '}';
     }
 }

@@ -7,6 +7,7 @@ create table minicloud.cpus (
     cache integer not null,
     clock_frequency double precision not null,
     cores integer not null,
+    version INT DEFAULT 0,
     primary key (id)
 ) engine=InnoDB;
 
