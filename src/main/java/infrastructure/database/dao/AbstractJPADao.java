@@ -103,6 +103,7 @@ public abstract class AbstractJPADao<T> implements GenericDao<T> {
             em.getTransaction().commit();
         }
         catch (OptimisticLockException e){
+            System.out.println("Não foi possível fazer a alteração devido a entidade estar obsoleta");
             if (em.getTransaction() != null) em.getTransaction().rollback();
             throw e;
         }
