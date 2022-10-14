@@ -60,39 +60,45 @@ public class Main {
 
                     int opcaoAlteracao = Console.readInt('\n' + "Digite um número de 1 a 4:");
                     CPU cpuAlterado = null;
-                    switch (opcaoAlteracao)
-                    {
-                        case 1: {
-                            String novaArquiteturaString = Console.readLine("Digite a nova arquitetura do CPU (ARM, X86, X86_64): ");
-                            ArchitectureEnum novaArquitetura = ArchitectureEnum.valueOf(novaArquiteturaString);
-                            cpuParaAlterar.setArchitecture(novaArquitetura);
-                            cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
-                            break;
-                        }
 
-                        case 2: {
-                            Integer novosCores = Console.readInt("Informe o valor do número de cores: ");
-                            cpuParaAlterar.setCores(novosCores);
-                            cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
-                            break;
-                        }
+                    try {
+                        switch (opcaoAlteracao) {
+                            case 1: {
+                                String novaArquiteturaString = Console.readLine("Digite a nova arquitetura do CPU (ARM, X86, X86_64): ");
+                                ArchitectureEnum novaArquitetura = ArchitectureEnum.valueOf(novaArquiteturaString);
+                                cpuParaAlterar.setArchitecture(novaArquitetura);
+                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                break;
+                            }
 
-                        case 3: {
-                            Integer novoCache = Console.readInt("Informe o valor do cache em bytes: ");
-                            cpuParaAlterar.setCache(novoCache);
-                            cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
-                            break;
-                        }
+                            case 2: {
+                                Integer novosCores = Console.readInt("Informe o valor do número de cores: ");
+                                cpuParaAlterar.setCores(novosCores);
+                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                break;
+                            }
 
-                        case 4: {
-                            Double novoClockFrequency = Console.readDouble("Informe o valor do clock: ");
-                            cpuParaAlterar.setClockFrequency(novoClockFrequency);
-                            cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
-                            break;
-                        }
+                            case 3: {
+                                Integer novoCache = Console.readInt("Informe o valor do cache em bytes: ");
+                                cpuParaAlterar.setCache(novoCache);
+                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                break;
+                            }
 
-                        default:
-                            System.out.println('\n' + "Opção inválida!");
+                            case 4: {
+                                Double novoClockFrequency = Console.readDouble("Informe o valor do clock: ");
+                                cpuParaAlterar.setClockFrequency(novoClockFrequency);
+                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                break;
+                            }
+
+                            default:
+                                System.out.println('\n' + "Opção inválida!");
+                        }
+                    }
+                    catch (Exception ex) {
+                        System.out.println("Erro: " + ex.getMessage());
+                        break;
                     }
 
                     System.out.println('\n' + "Alteração efetuada com sucesso!");
