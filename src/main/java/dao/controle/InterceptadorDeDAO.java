@@ -1,6 +1,7 @@
 package dao.controle;
 
 import anotacao.PersistenceContent;
+import em.controle.FabricaDeEntityManagers;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import servico.controle.JPAUtil;
@@ -28,7 +29,7 @@ public class InterceptadorDeDAO implements MethodInterceptor {
         try {
             System.out.println(">>>>>>>>> Começou Interceptação de método <<<<<<<<<");
             campo.setAccessible(true);
-            campo.set(o, JPAUtil.getEntityManager());
+            campo.set(o, FabricaDeEntityManagers.getEntityManager());
             Object obj = methodProxy.invokeSuper(o, objects);
             System.out.println(">>>>>>>>> Terminou Interceptação de método <<<<<<<<<");
             return obj;
