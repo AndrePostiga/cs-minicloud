@@ -1,5 +1,6 @@
 package dao.impl;
 
+import anotacao.PersistenceContent;
 import dao.ProdutoDAO;
 import excecao.InfraestruturaException;
 import excecao.ObjetoNaoEncontradoException;
@@ -11,9 +12,13 @@ import javax.persistence.LockModeType;
 import java.util.List;
 
 public class ProdutoDAOImpl implements ProdutoDAO {
+
+	@PersistenceContent
+	protected EntityManager em;
+
 	public long inclui(Produto umProduto) {
 		try {
-			EntityManager em = JPAUtil.getEntityManager();
+			//EntityManager em = JPAUtil.getEntityManager();
 
 			em.persist(umProduto);
 
@@ -25,7 +30,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
 	public void altera(Produto umProduto) throws ObjetoNaoEncontradoException {
 		try {
-			EntityManager em = JPAUtil.getEntityManager();
+			//EntityManager em = JPAUtil.getEntityManager();
 
 			Produto produto = em.find(Produto.class, umProduto.getId(), LockModeType.PESSIMISTIC_WRITE);
 
@@ -41,7 +46,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
 	public void exclui(long id) throws ObjetoNaoEncontradoException {
 		try {
-			EntityManager em = JPAUtil.getEntityManager();
+			//EntityManager em = JPAUtil.getEntityManager();
 
 			Produto produto = em.find(Produto.class, id, LockModeType.PESSIMISTIC_WRITE);
 
@@ -57,7 +62,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
 	public Produto recuperaUmProduto(long id) throws ObjetoNaoEncontradoException {
 		try {
-			EntityManager em = JPAUtil.getEntityManager();
+			//EntityManager em = JPAUtil.getEntityManager();
 
 			Produto umProduto = (Produto) em.find(Produto.class, new Long(id));
 
@@ -73,7 +78,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
 	public Produto recuperaUmProdutoComLock(long id) throws ObjetoNaoEncontradoException {
 		try {
-			EntityManager em = JPAUtil.getEntityManager();
+			//EntityManager em = JPAUtil.getEntityManager();
 
 			Produto umProduto = em.find(Produto.class, id, LockModeType.PESSIMISTIC_WRITE);
 
@@ -90,7 +95,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 	@SuppressWarnings("unchecked")
 	public List<Produto> recuperaProdutos() {
 		try {
-			EntityManager em = JPAUtil.getEntityManager();
+			//EntityManager em = JPAUtil.getEntityManager();
 
 			List<Produto> produtos = em.createQuery("select p from Produto p order by p.id asc").getResultList();
 
