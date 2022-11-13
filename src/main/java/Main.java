@@ -1,15 +1,22 @@
+import appServices.CpuAppService;
+import appServices.CpuAppServiceImpl;
 import corejava.Console;
 import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.CPU;
-import domain.MachineAggregate.Daos.CpuDAO;
-import infrastructure.database.DaoFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.io.IOException;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Hello World!");
-        CpuDAO dao = DaoFactory.getDAO(CpuDAO.class);
+
+        @SuppressWarnings("resource")
+        ApplicationContext factory = new ClassPathXmlApplicationContext("beans-jpa.xml");
+
+        CpuAppService cpuAppService = (CpuAppService)factory.getBean("cpuAppService");
 
         boolean continua = true;
         while (continua) {
@@ -34,7 +41,7 @@ public class Main {
                     Double clockFrequency = Console.readDouble("Informe o valor do clock: ");
 
                     CPU cpu = new CPU(arquitetura, cores, cache, clockFrequency);
-                    dao.create(cpu);
+                    cpuAppService.Include(cpu);
                     System.out.println('\n' + "CPU número " + cpu.getId() + " incluído com sucesso!");
                     System.out.println('\n' + "Informações do CPU : \n" + cpu);
                     break;
@@ -44,7 +51,7 @@ public class Main {
                 {
                     int resposta = Console.readInt('\n' + "Digite o número do CPU que você deseja alterar: ");;
 
-                    CPU cpuParaAlterar = dao.getById(new Long(resposta));
+                    CPU cpuParaAlterar = cpuAppService.GetById(new Long(resposta));
                     if (cpuParaAlterar == null) {
                         System.out.println('\n' + "CPU com identificador " + resposta + " não foi encontrado!");
                         break;
@@ -67,28 +74,28 @@ public class Main {
                                 String novaArquiteturaString = Console.readLine("Digite a nova arquitetura do CPU (ARM, X86, X86_64): ");
                                 ArchitectureEnum novaArquitetura = ArchitectureEnum.valueOf(novaArquiteturaString);
                                 cpuParaAlterar.setArchitecture(novaArquitetura);
-                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                cpuAlterado = cpuAppService.Update(new Long(resposta), cpuParaAlterar);
                                 break;
                             }
 
                             case 2: {
                                 Integer novosCores = Console.readInt("Informe o valor do número de cores: ");
                                 cpuParaAlterar.setCores(novosCores);
-                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                cpuAlterado = cpuAppService.Update(new Long(resposta), cpuParaAlterar);
                                 break;
                             }
 
                             case 3: {
                                 Integer novoCache = Console.readInt("Informe o valor do cache em bytes: ");
                                 cpuParaAlterar.setCache(novoCache);
-                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                cpuAlterado = cpuAppService.Update(new Long(resposta), cpuParaAlterar);
                                 break;
                             }
 
                             case 4: {
                                 Double novoClockFrequency = Console.readDouble("Informe o valor do clock: ");
                                 cpuParaAlterar.setClockFrequency(novoClockFrequency);
-                                cpuAlterado = dao.update(new Long(resposta), cpuParaAlterar);
+                                cpuAlterado = cpuAppService.Update(new Long(resposta), cpuParaAlterar);
                                 break;
                             }
 
@@ -109,7 +116,7 @@ public class Main {
                 case 3:
                 {
                     int resposta = Console.readInt('\n' + "Digite o número do cpu que você deseja remover: ");
-                    CPU cpuParaRemover = dao.getById(new Long(resposta));
+                    CPU cpuParaRemover = cpuAppService.GetById(new Long(resposta));
                     if (cpuParaRemover == null) {
                         System.out.println('\n' + "CPU com identificador " + resposta + " não foi encontrado!");
                         break;
@@ -120,7 +127,7 @@ public class Main {
                     String resp = Console.readLine('\n' +"Confirma a remoção do cpu? (s/n)");
 
                     if(resp.equals("s")) {
-                        dao.delete(new Long(resposta));
+                        cpuAppService.Delete(new Long(resposta));
                     }
                     else {
                         System.out.println('\n' + "CPU não removido.");
@@ -131,7 +138,7 @@ public class Main {
 
                 case 4:
                 {
-                    List<CPU> cpus = dao.getAll();
+                    List<CPU> cpus = cpuAppService.GetCpus();
                     cpus.stream().forEach(System.out::println);
                     break;
                 }
