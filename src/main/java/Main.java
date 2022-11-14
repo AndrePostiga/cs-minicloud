@@ -1,5 +1,6 @@
 import appServices.CpuAppService;
 import appServices.CpuAppServiceImpl;
+import appServices.PhysicalMachineAppService;
 import corejava.Console;
 import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.CPU;
@@ -7,16 +8,47 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        System.out.println("Hello World!");
+    public static void main(String[] args){
+        System.out.println("Bem vindo ao Mini Cloud");
 
-        @SuppressWarnings("resource")
+        //Instancia classes de serviço
         ApplicationContext factory = new ClassPathXmlApplicationContext("beans-jpa.xml");
-
         CpuAppService cpuAppService = (CpuAppService)factory.getBean("cpuAppService");
+        PhysicalMachineAppService physicalMachineAppService = (PhysicalMachineAppService)factory.getBean("physicalMachineAppService");
+
+        int escolha = -1;
+        do {
+
+            if (escolha == 1){
+                Main.exibeMenuDeCpus(cpuAppService);
+            }
+            else if (escolha == 2){
+                MenuDeMaquinasFisicas.ExibeMenuDeMaquinasFisicas(physicalMachineAppService);
+            }
+
+            escolha = exibeMenuERetornaEscolha();
+        }
+        while (escolha != 0);
+    }
+
+    private static int exibeMenuERetornaEscolha() {
+        int escolha;
+        System.out.println("Menu: ");
+        System.out.println("1 - Menu de CPUS");
+        System.out.println("2 - Menu de Máquinas Físicas");
+        System.out.println("3 - Menu de Máquinas Virtuais");
+        System.out.println("4 - Alocações");
+        System.out.println("0 - Sair \n ");
+        escolha = Console.readInt('\n' + "Digite uma opção:");
+        return escolha;
+    }
+
+    private static void exibeMenuDeCpus(CpuAppService cpuAppService) {
 
         boolean continua = true;
         while (continua) {

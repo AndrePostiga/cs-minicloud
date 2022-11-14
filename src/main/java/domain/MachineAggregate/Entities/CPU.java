@@ -6,10 +6,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
+@NamedQueries({@NamedQuery(name = "CPU.GetAll", query = "select p from CPU p order by p.id") })
 @Entity
 @Table(name = "CPUs")
-@DynamicInsert
-@DynamicUpdate
 public class CPU {
 
     public CPU() {}
