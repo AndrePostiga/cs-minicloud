@@ -1,6 +1,7 @@
 import appServices.CpuAppService;
 import appServices.CpuAppServiceImpl;
 import appServices.PhysicalMachineAppService;
+import appServices.VirtualMachineAppService;
 import corejava.Console;
 import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.CPU;
@@ -20,6 +21,7 @@ public class Main {
         ApplicationContext factory = new ClassPathXmlApplicationContext("beans-jpa.xml");
         CpuAppService cpuAppService = (CpuAppService)factory.getBean("cpuAppService");
         PhysicalMachineAppService physicalMachineAppService = (PhysicalMachineAppService)factory.getBean("physicalMachineAppService");
+        VirtualMachineAppService virtualMachineAppService = (VirtualMachineAppService)factory.getBean("virtualMachineAppService");
 
         int escolha = -1;
         do {
@@ -29,6 +31,9 @@ public class Main {
             }
             else if (escolha == 2){
                 MenuDeMaquinasFisicas.ExibeMenuDeMaquinasFisicas(physicalMachineAppService);
+            }
+            else if (escolha == 3){
+                MenuDeMaquinasVirtuais.ExibeMenuDeMaquinasVirtuais(virtualMachineAppService);
             }
 
             escolha = exibeMenuERetornaEscolha();
