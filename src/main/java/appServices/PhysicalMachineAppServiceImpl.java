@@ -1,6 +1,5 @@
 package appServices;
 
-import corejava.Console;
 import domain.MachineAggregate.Entities.CPU;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.PhysicalMachine;
@@ -10,7 +9,6 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService{
@@ -58,5 +56,50 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService{
 
         physicalMachineDao.Delete(physicalMachineToDelete);
         return physicalMachineToDelete;
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public PhysicalMachine UpdateCpu(PhysicalMachine maquina, int cpuId) throws NotFoundException, PreconditionFailException {
+        CPU cpu = cpuAppService.GetById(new Long(cpuId));
+        if (cpu == null) {
+            throw new NotFoundException("Não foi possível encontrar o cpu de identificador: " + cpuId);
+        }
+
+        maquina.UpdateCpu(cpu);
+        physicalMachineDao.Update(maquina);
+        return this.GetPhysicalMachinesById(maquina.getId());
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public PhysicalMachine UpdateMemory(PhysicalMachine maquina, long memoria) throws PreconditionFailException {
+        maquina.UpdateMemory(memoria);
+        physicalMachineDao.Update(maquina);
+        return this.GetPhysicalMachinesById(maquina.getId());
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public PhysicalMachine UpdateSSD(PhysicalMachine maquina, long ssd) throws PreconditionFailException {
+        maquina.UpdateSSD(ssd);
+        physicalMachineDao.Update(maquina);
+        return this.GetPhysicalMachinesById(maquina.getId());
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public PhysicalMachine UpdateHd(PhysicalMachine maquina, long hd) throws PreconditionFailException {
+        maquina.UpdateHD(hd);
+        physicalMachineDao.Update(maquina);
+        return this.GetPhysicalMachinesById(maquina.getId());
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public PhysicalMachine UpdateOperationalSystem(PhysicalMachine maquina, OperationalSystemEnum sistemaOperational) throws PreconditionFailException {
+        maquina.UpdateOperationalSystem(sistemaOperational);
+        physicalMachineDao.Update(maquina);
+        return this.GetPhysicalMachinesById(maquina.getId());
     }
 }

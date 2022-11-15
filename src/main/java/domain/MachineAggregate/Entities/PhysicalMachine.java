@@ -13,9 +13,10 @@ import java.util.List;
 })
 @Entity
 @Table(name = "PhysicalMachines")
-public class PhysicalMachine extends Machine{
+public class PhysicalMachine extends Machine {
 
-    public PhysicalMachine() {}
+    public PhysicalMachine() {
+    }
 
     @ManyToOne(optional = false)
     protected CPU cpu;
@@ -172,6 +173,61 @@ public class PhysicalMachine extends Machine{
 
     public List<VirtualPhysicalMachineAllocation> getAllocations() {
         return allocations;
+    }
+
+    public void UpdateCpu(CPU cpu) throws PreconditionFailException {
+        if (this.allocations == null || this.allocations.stream().count() == 0) {
+            this.cpu = cpu;
+            return;
+        }
+
+        for (VirtualPhysicalMachineAllocation allocation : this.allocations) {
+            if (cpu.getArchitecture() != allocation.virtualMachine.getArchitecture())
+                throw new PreconditionFailException("Não é possível atualizar a máquina física para um CPU com arquitetura diferente devido suas alocações");
+
+            if (cpu.getCores() < allocation.virtualMachine.getvCores())
+                throw new PreconditionFailException("Não é possível atualizar a máquina física para um CPU com menos cores devido suas alocações");
+        }
+
+        this.cpu = cpu;
+    }
+
+    public void UpdateMemory(long newMemoryInBytes) throws PreconditionFailException {
+        long usedMemory = this.memoryInBytes - this.GetRemainMemoryInBytes();
+        if (usedMemory > newMemoryInBytes)
+            throw new PreconditionFailException("Não é possível atualizar a memória da máquina física pois a nova quantidade de memória é menor do que a quantidade de memória utilizada por sua alocações");
+
+        this.memoryInBytes = newMemoryInBytes;
+    }
+
+    public void UpdateSSD(long newSsdInBytes) throws PreconditionFailException {
+        long usedMemory = this.ssdInBytes - this.GetRemainSsdInBytes();
+        if (usedMemory > newSsdInBytes)
+            throw new PreconditionFailException("Não é possível atualizar o ssd da máquina física pois a nova quantidade de ssd é menor do que a quantidade de ssd utilizada por sua alocações");
+
+        this.ssdInBytes = newSsdInBytes;
+    }
+
+    public void UpdateHD(long newHdInBytes) throws PreconditionFailException {
+        long usedMemory = this.hdInBytes - this.GetRemainHdInBytes();
+        if (usedMemory > newHdInBytes)
+            throw new PreconditionFailException("Não é possível atualizar o hd da máquina física pois a nova quantidade de hd é menor do que a quantidade de hd utilizada por sua alocações");
+
+        this.hdInBytes = newHdInBytes;
+    }
+
+    public void UpdateOperationalSystem(OperationalSystemEnum newOperationalSystem) throws PreconditionFailException {
+        if (this.allocations == null || this.allocations.stream().count() == 0) {
+            this.operationalSystem = newOperationalSystem;
+            return;
+        }
+
+        for (VirtualPhysicalMachineAllocation allocation : this.allocations) {
+            if (newOperationalSystem != allocation.virtualMachine.getOperationalSystem())
+                throw new PreconditionFailException("Não é possível atualizar a máquina física para um sistema operacional diferente devido suas alocações");
+        }
+
+        this.operationalSystem = newOperationalSystem;
     }
 
     @Override

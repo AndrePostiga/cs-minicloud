@@ -1,5 +1,6 @@
 import appServices.PhysicalMachineAppService;
 import corejava.Console;
+import domain.MachineAggregate.Entities.CPU;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.PhysicalMachine;
 import exceptions.PreconditionFailException;
@@ -57,7 +58,52 @@ public class MenuDeMaquinasFisicas {
         System.out.println(physicalMachinePrint);
     }
 
-    private static void EditaUmaMaquinaFisica(PhysicalMachineAppService physicalMachineAppService) {
+    private static void EditaUmaMaquinaFisica(PhysicalMachineAppService physicalMachineAppService) throws PreconditionFailException, NotFoundException {
+        int identificador = Console.readInt('\n' + "Digite o identificador da máquina física a ser editado:");
+        PhysicalMachine maquina = physicalMachineAppService.GetPhysicalMachinesById((long) identificador);
+        if (maquina == null) {
+            System.out.println('\n' + "CPU com identificador " + identificador + " não foi encontrado!");
+            return;
+        }
+
+        String physicalMachinePrint = MenuDeMaquinasFisicas.GetTableHeader("Máquina Física Para Atualizar");
+        physicalMachinePrint += maquina.PrintPhysicalMachine();
+        physicalMachinePrint += GetTableLine();
+        System.out.println(physicalMachinePrint);
+
+        System.out.println('\n' + "O que você deseja alterar?");
+        System.out.println('\n' + "1. CPU");
+        System.out.println('\n' + "2. Memória");
+        System.out.println('\n' + "3. SSD");
+        System.out.println('\n' + "4. HD");
+        System.out.println('\n' + "5. Sistema Operational");
+
+        PhysicalMachine maquinaEditada = null;
+        int opcaoAlteracao = Console.readInt('\n' + "Digite um número de 1 a 4:");
+        if (opcaoAlteracao == 1) {
+            int cpuId = Console.readInt('\n' + "Digite o id do novo CPU:");
+            maquinaEditada = physicalMachineAppService.UpdateCpu(maquina, cpuId);
+        } else if (opcaoAlteracao == 2) {
+            int memoria = Console.readInt('\n' + "Digite a nova quantidade de memória:");
+            maquinaEditada = physicalMachineAppService.UpdateMemory(maquina, memoria);
+        } else if (opcaoAlteracao == 3) {
+            int ssd = Console.readInt('\n' + "Digite a nova quantidade de SSD:");
+            maquinaEditada = physicalMachineAppService.UpdateSSD(maquina, ssd);
+        } else if (opcaoAlteracao == 4) {
+            int hd = Console.readInt('\n' + "Digite a nova quantidade de HD:");
+            maquinaEditada = physicalMachineAppService.UpdateHd(maquina, hd);
+        } else if (opcaoAlteracao == 5) {
+            String sistemaOperationalString = Console.readLine("Digite o novo SO da máquina (Windows, WindowsServer, MacOs, Ubuntu, CentOs): ");
+            OperationalSystemEnum sistemaOperational = OperationalSystemEnum.valueOf(sistemaOperationalString);
+            maquinaEditada = physicalMachineAppService.UpdateOperationalSystem(maquina, sistemaOperational);
+        }
+
+        if (maquinaEditada != null) {
+            physicalMachinePrint = MenuDeMaquinasFisicas.GetTableHeader("Máquina Física Editada");
+            physicalMachinePrint += maquinaEditada.PrintPhysicalMachine();
+            physicalMachinePrint += GetTableLine();
+            System.out.println(physicalMachinePrint);
+        }
     }
 
     private static void ExibeUmaMaquinaFisicaComAlocacoes(PhysicalMachineAppService physicalMachineAppService) {
