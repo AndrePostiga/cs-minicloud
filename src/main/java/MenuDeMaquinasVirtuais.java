@@ -24,6 +24,10 @@ public class MenuDeMaquinasVirtuais {
                     MenuDeMaquinasVirtuais.ExibeUmaMaquinaVirtual(virtualMachineAppService);
                 } else if (escolha == 3) {
                     MenuDeMaquinasVirtuais.CriarUmaMaquinaVirtual(virtualMachineAppService);
+                } else if (escolha == 4) {
+                    MenuDeMaquinasVirtuais.EditarUmaMaquinaVirtual(virtualMachineAppService);
+                } else if (escolha == 5) {
+                    MenuDeMaquinasVirtuais.RemoverUmaMaquinaVirtual(virtualMachineAppService);
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -40,6 +44,49 @@ public class MenuDeMaquinasVirtuais {
             escolha = Console.readInt('\n' + "Digite uma opção:");
         }
         while (escolha != 0);
+    }
+
+    private static void RemoverUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws NotFoundException {
+        int identificador = Console.readInt('\n' + "Digite o identificador da máquina virtual a ser deletada:");
+        VirtualMachine maquina = virtualMachineAppService.DeleteVirtualMachine((long) identificador);
+        System.out.println(maquina);
+    }
+
+    private static void EditarUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) {
+        int identificador = Console.readInt('\n' + "Digite o identificador da máquina virtual a ser editada:");
+        VirtualMachine maquina = virtualMachineAppService.GetVirtualMachinesById((long) identificador);
+        if (maquina == null) {
+            System.out.println('\n' + "Máquina virtual com identificador " + identificador + " não foi encontrada!");
+            return;
+        }
+
+        System.out.println(maquina);
+
+        System.out.println("O que você deseja alterar?");
+        System.out.println("1. vCores");
+        System.out.println("2. Memória");
+        System.out.println("3. SSD");
+        System.out.println("4. HD");
+
+        VirtualMachine maquinaEditada = null;
+        int opcaoAlteracao = Console.readInt("Digite um número de 1 a 4:");
+        if (opcaoAlteracao == 1) {
+            int vCores = Console.readInt("Digite a nova quantidade de vCores:");
+            maquinaEditada = virtualMachineAppService.UpdateVCores(maquina, vCores);
+        } else if (opcaoAlteracao == 2) {
+            int memoria = Console.readInt("Digite a nova quantidade de memória:");
+            maquinaEditada = virtualMachineAppService.UpdateMemory(maquina, memoria);
+        } else if (opcaoAlteracao == 3) {
+            int ssd = Console.readInt("Digite a nova quantidade de SSD:");
+            maquinaEditada = virtualMachineAppService.UpdateSSD(maquina, ssd);
+        } else if (opcaoAlteracao == 4) {
+            int hd = Console.readInt("Digite a nova quantidade de HD:");
+            maquinaEditada = virtualMachineAppService.UpdateHd(maquina, hd);
+        }
+
+        if (maquinaEditada != null) {
+            System.out.println(maquinaEditada);
+        }
     }
 
     private static void CriarUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws PreconditionFailException, NotFoundException {

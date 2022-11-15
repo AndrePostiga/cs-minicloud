@@ -15,4 +15,14 @@ public interface VirtualMachineAppService {
     List<VirtualMachine> GetVirtualMachines();
 
     VirtualMachine CreateVirtualMachine(int vCores, ArchitectureEnum arquitetura, long memoryInBytes, boolean hasGpu, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational, VirtualMachineStatusEnum status, long physicalMachineId) throws NotFoundException, PreconditionFailException;
+
+    VirtualMachine DeleteVirtualMachine(long identificador) throws NotFoundException;
+
+    VirtualMachine UpdateVCores(VirtualMachine maquina, int vCores);
+
+    VirtualMachine UpdateMemory(VirtualMachine maquina, int memoria);
+
+    VirtualMachine UpdateSSD(VirtualMachine maquina, int ssd);
+
+    VirtualMachine UpdateHd(VirtualMachine maquina, int hd);
 }

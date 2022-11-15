@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService{
+public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService {
 
     @Autowired
     private PhysicalMachineDao physicalMachineDao;

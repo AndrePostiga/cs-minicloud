@@ -62,7 +62,7 @@ public class MenuDeMaquinasFisicas {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina física a ser editado:");
         PhysicalMachine maquina = physicalMachineAppService.GetPhysicalMachinesById((long) identificador);
         if (maquina == null) {
-            System.out.println('\n' + "CPU com identificador " + identificador + " não foi encontrado!");
+            System.out.println('\n' + "Máquina com identificador " + identificador + " não foi encontrado!");
             return;
         }
 
@@ -71,26 +71,26 @@ public class MenuDeMaquinasFisicas {
         physicalMachinePrint += GetTableLine();
         System.out.println(physicalMachinePrint);
 
-        System.out.println('\n' + "O que você deseja alterar?");
-        System.out.println('\n' + "1. CPU");
-        System.out.println('\n' + "2. Memória");
-        System.out.println('\n' + "3. SSD");
-        System.out.println('\n' + "4. HD");
-        System.out.println('\n' + "5. Sistema Operational");
+        System.out.println("O que você deseja alterar?");
+        System.out.println("1. CPU");
+        System.out.println("2. Memória");
+        System.out.println("3. SSD");
+        System.out.println("4. HD");
+        System.out.println("5. Sistema Operational");
 
         PhysicalMachine maquinaEditada = null;
-        int opcaoAlteracao = Console.readInt('\n' + "Digite um número de 1 a 4:");
+        int opcaoAlteracao = Console.readInt("Digite um número de 1 a 4:");
         if (opcaoAlteracao == 1) {
-            int cpuId = Console.readInt('\n' + "Digite o id do novo CPU:");
+            int cpuId = Console.readInt("Digite o id do novo CPU:");
             maquinaEditada = physicalMachineAppService.UpdateCpu(maquina, cpuId);
         } else if (opcaoAlteracao == 2) {
-            int memoria = Console.readInt('\n' + "Digite a nova quantidade de memória:");
+            int memoria = Console.readInt("Digite a nova quantidade de memória:");
             maquinaEditada = physicalMachineAppService.UpdateMemory(maquina, memoria);
         } else if (opcaoAlteracao == 3) {
-            int ssd = Console.readInt('\n' + "Digite a nova quantidade de SSD:");
+            int ssd = Console.readInt("Digite a nova quantidade de SSD:");
             maquinaEditada = physicalMachineAppService.UpdateSSD(maquina, ssd);
         } else if (opcaoAlteracao == 4) {
-            int hd = Console.readInt('\n' + "Digite a nova quantidade de HD:");
+            int hd = Console.readInt("Digite a nova quantidade de HD:");
             maquinaEditada = physicalMachineAppService.UpdateHd(maquina, hd);
         } else if (opcaoAlteracao == 5) {
             String sistemaOperationalString = Console.readLine("Digite o novo SO da máquina (Windows, WindowsServer, MacOs, Ubuntu, CentOs): ");

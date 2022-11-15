@@ -49,4 +49,40 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
         }
 
     }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public VirtualMachine DeleteVirtualMachine(long identificador) throws NotFoundException {
+        VirtualMachine machineToDelete = virtualMachineDao.GetByIdWithLock(identificador);
+        if (machineToDelete == null) {
+            throw new NotFoundException("Não foi possível encontrar a máquina de identificador: " + identificador);
+        }
+
+        virtualMachineDao.Delete(machineToDelete);
+        return machineToDelete;
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public VirtualMachine UpdateVCores(VirtualMachine maquina, int vCores) {
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public VirtualMachine UpdateMemory(VirtualMachine maquina, int memoria) {
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public VirtualMachine UpdateSSD(VirtualMachine maquina, int ssd) {
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor={Exception.class})
+    public VirtualMachine UpdateHd(VirtualMachine maquina, int hd) {
+        return null;
+    }
 }
