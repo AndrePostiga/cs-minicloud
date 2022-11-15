@@ -15,7 +15,8 @@ public class CpuAppServiceImpl implements CpuAppService {
     @Override
     @Transactional
     public CPU Include(CPU cpu) {
-        return cpuDAO.Create(cpu);
+        CPU createCpu = cpuDAO.Create(cpu);
+        return createCpu;
     }
 
     @Override

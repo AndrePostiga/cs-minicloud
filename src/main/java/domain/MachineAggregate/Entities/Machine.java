@@ -62,4 +62,8 @@ public abstract class Machine {
     public OperationalSystemEnum getOperationalSystem() {
         return operationalSystem;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

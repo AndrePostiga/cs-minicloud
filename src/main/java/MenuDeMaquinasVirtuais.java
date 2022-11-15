@@ -42,11 +42,11 @@ public class MenuDeMaquinasVirtuais {
         while (escolha != 0);
     }
 
-    private static void CriarUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws PreconditionFailException {
+    private static void CriarUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws PreconditionFailException, NotFoundException {
         System.out.println("\n");
 
         int vCores = Console.readInt("Digite a quantidade de vCpus que a máquina irá utilizar:");
-        String arquiteturaString = Console.readLine('\n' +"Informe a arquitetura do vCore (ARM, X86, X86_64): ");
+        String arquiteturaString = Console.readLine('\n' + "Informe a arquitetura do vCore (ARM, X86, X86_64): ");
         ArchitectureEnum arquitetura = ArchitectureEnum.valueOf(arquiteturaString);
         long memoryInBytes = Console.readInt("Digite a quantidade de memória ram em Bytes:");
         boolean hasGpu = Console.readLine("Sua máquina física terá GPU? (s/n):") == "s";
@@ -54,22 +54,14 @@ public class MenuDeMaquinasVirtuais {
         long hdInBytes = Console.readInt("Digite a quantidade de memória hd em Bytes:");
         String sistemaOperationalString = Console.readLine("Digite o SO da máquina (Windows, WindowsServer, MacOs, Ubuntu, CentOs): ");
         OperationalSystemEnum sistemaOperational = OperationalSystemEnum.valueOf(sistemaOperationalString);
-        String statusString = Console.readLine('\n' +"Informe o status inicial da máquina (On, Off, Iddle): ");
+        String statusString = Console.readLine('\n' + "Informe o status inicial da máquina (On, Off, Iddle): ");
         VirtualMachineStatusEnum status = VirtualMachineStatusEnum.valueOf(statusString);
         long maquinaFisicaId = Console.readInt("Digite o id da máquina física que a máquina virtual será alocada:");
 
         VirtualMachine maquinaCriada;
-        try {
-            maquinaCriada = virtualMachineAppService.CreateVirtualMachine(
-                    vCores, arquitetura, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, sistemaOperational, status, maquinaFisicaId
-            );
-        } catch (NotFoundException ex) {
-            System.out.println(ex.getMessage());
-            return;
-        } catch (Exception ex) {
-            throw ex;
-        }
-
+        maquinaCriada = virtualMachineAppService.CreateVirtualMachine(
+                vCores, arquitetura, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, sistemaOperational, status, maquinaFisicaId
+        );
 
         System.out.println("\n--- Máquina Física Criada ---\n");
         System.out.println(maquinaCriada);

@@ -84,4 +84,17 @@ public class VirtualPhysicalMachineAllocation {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "VirtualPhysicalMachineAllocation{" +
+                "id=" + id +
+                ", virtualMachine=" + virtualMachine.getId() +
+                ", physicalMachine=" + physicalMachine.getId() +
+                ", userId=" + userId +
+                ", startedDate=" + startedDate +
+                ", createdDate=" + createdDate +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

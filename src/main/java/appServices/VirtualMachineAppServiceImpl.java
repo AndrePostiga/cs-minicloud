@@ -32,7 +32,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     }
 
     @Override
-    @Transactional(rollbackFor = {Exception.class})
+    @Transactional
     public VirtualMachine CreateVirtualMachine(int vCores, ArchitectureEnum arquitetura, long memoryInBytes, boolean hasGpu, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational, VirtualMachineStatusEnum status, long physicalMachineId) throws NotFoundException, PreconditionFailException {
 
         PhysicalMachine physicalMachine = physicalMachineAppService.GetPhysicalMachinesById(physicalMachineId);

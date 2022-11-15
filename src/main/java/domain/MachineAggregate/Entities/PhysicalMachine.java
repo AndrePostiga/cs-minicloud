@@ -41,27 +41,49 @@ public class PhysicalMachine extends Machine{
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        String allocations = "\n\nAllocations: \n";
+    public String PrintAllocations() {
+        String leftAlignFormat = "| %-5d | %-6s | %-6d | %-11s | %-11s | %-11s | %-11s | %-11s |%n";
+        String allocations = "Alocações: \n";
+
+        allocations += String.format("+-----------------------------------------------------------------------------------------------+%n");
+        allocations += String.format("| %-93s |%n", "Máquinas Virtuais Alocadas");
+        allocations += String.format("+-------+--------+--------+-------------+-------------+-------------+-------------+-------------+%n");
+        allocations += String.format("| Vm ID | Status | vCores | Arquitetura |   Memória   |     SSD     |      HD     |     OS      |%n");
+        allocations += String.format("+-------+--------+--------+-------------+-------------+-------------+-------------+-------------+%n");
+
         for (VirtualPhysicalMachineAllocation allocation : this.allocations) {
-            allocations += allocation.virtualMachine.toString();
-            allocations += "\n";
+            allocations += String.format(leftAlignFormat,
+                    allocation.virtualMachine.getId(),
+                    allocation.virtualMachine.getStatus(),
+                    allocation.virtualMachine.getvCores(),
+                    allocation.virtualMachine.getArchitecture(),
+                    allocation.virtualMachine.getMemoryInBytes(),
+                    allocation.virtualMachine.getSsdInBytes(),
+                    allocation.virtualMachine.getHdInBytes(),
+                    allocation.virtualMachine.getOperationalSystem());
         }
 
-        return "PhysicalMachine id=" + id + "\n{" +
-                "\n\t memoryInBytes=" + memoryInBytes +
-                "\n\t cpu=" + cpu +
-                "\n\t hasGpu=" + hasGpu +
-                "\n\t ssdInBytes=" + ssdInBytes +
-                "\n\t hdInBytes=" + hdInBytes +
-                "\n\t operationalSystem=" + operationalSystem +
-                "\n\t status=" + status +
-                "\n}" +
-                "\nRemainMemory=" + this.GetRemainMemoryInBytes() +
-                "\t RemainSSD="+ this.GetRemainSsdInBytes() +
-                "\t RemainHD="+ this.GetRemainHdInBytes() +
-                allocations;
+        allocations += String.format("+-----------------------------------------------------------------------------------------------+%n");
+
+        return allocations;
+    }
+
+    public String PrintPhysicalMachine() {
+        String leftAlignFormat = "| %-5d | %-6s | %-6d | %-11s | %-11s | %-11s | %-11s | %-11s | %-11s | %-11s | %-11s |%n";
+        String physicalMachine = String.format(leftAlignFormat,
+                this.getId(),
+                this.getStatus(),
+                this.getCpu().getId(),
+                this.getCpu().getArchitecture(),
+                this.getMemoryInBytes(),
+                this.getSsdInBytes(),
+                this.getHdInBytes(),
+                this.getOperationalSystem(),
+                this.GetRemainMemoryInBytes(),
+                this.GetRemainSsdInBytes(),
+                this.GetRemainHdInBytes());
+
+        return physicalMachine;
     }
 
     public VirtualPhysicalMachineAllocation Allocate(VirtualMachine machine) throws PreconditionFailException {
@@ -103,6 +125,10 @@ public class PhysicalMachine extends Machine{
 
     public long GetRemainMemoryInBytes() {
         long remainMemory = this.memoryInBytes;
+
+        if (this.allocations == null)
+            return remainMemory;
+
         for (VirtualPhysicalMachineAllocation allocation : this.allocations) {
             remainMemory -= allocation.virtualMachine.getMemoryInBytes();
         }
@@ -112,6 +138,10 @@ public class PhysicalMachine extends Machine{
 
     public long GetRemainSsdInBytes() {
         long remainMemory = this.ssdInBytes;
+
+        if (this.allocations == null)
+            return remainMemory;
+
         for (VirtualPhysicalMachineAllocation allocation : this.allocations) {
             remainMemory -= allocation.virtualMachine.getSsdInBytes();
         }
@@ -121,10 +151,35 @@ public class PhysicalMachine extends Machine{
 
     public long GetRemainHdInBytes() {
         long remainMemory = this.hdInBytes;
+
+        if (this.allocations == null)
+            return remainMemory;
+
         for (VirtualPhysicalMachineAllocation allocation : this.allocations) {
             remainMemory -= allocation.virtualMachine.getHdInBytes();
         }
 
         return remainMemory;
+    }
+
+    public CPU getCpu() {
+        return cpu;
+    }
+
+    public PhysicalMachineStatusEnum getStatus() {
+        return status;
+    }
+
+    public List<VirtualPhysicalMachineAllocation> getAllocations() {
+        return allocations;
+    }
+
+    @Override
+    public String toString() {
+        return "PhysicalMachine{" +
+                "cpu=" + cpu +
+                ", allocations=" + allocations +
+                ", status=" + status +
+                '}';
     }
 }

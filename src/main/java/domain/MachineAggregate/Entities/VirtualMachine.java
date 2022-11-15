@@ -58,25 +58,25 @@ public class VirtualMachine extends Machine{
         }
     }
 
-    @Override
-    public String toString() {
-        return "VirtualMachine{" +
-                "id=" + id +
-                ", memoryInBytes=" + memoryInBytes +
-                ", vCores=" + vCores +
-                ", hasGpu=" + hasGpu +
-                ", ssdInBytes=" + ssdInBytes +
-                ", hdInBytes=" + hdInBytes +
-                ", operationalSystem=" + operationalSystem +
-                ", status=" + status +
-                '}';
-    }
-
     public ArchitectureEnum getArchitecture() {
         return architecture;
     }
 
     public int getvCores() {
         return vCores;
+    }
+
+    public VirtualMachineStatusEnum getStatus() {
+        return status;
+    }
+
+    @Override
+    public String toString() {
+        return "VirtualMachine{" +
+                "vCores=" + vCores +
+                ", architecture=" + architecture +
+                ", allocation=" + allocation +
+                ", status=" + status +
+                '}';
     }
 }
