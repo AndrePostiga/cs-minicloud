@@ -40,8 +40,7 @@
  -->
        <tx:annotation-driven />
 
-       <bean id="transactionManager"
-             class="org.springframework.orm.jpa.JpaTransactionManager">
+       <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
               <property name="entityManagerFactory" ref="entityManagerFactory" />
        </bean>
 
@@ -62,7 +61,7 @@
               <property name="dataSource" ref="dataSource" />
               <property name="jpaVendorAdapter">
                      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                            <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
+                            <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect" />
                             <property name="showSql" value="true" />
                             <property name="generateDdl" value="true"/>
                      </bean>

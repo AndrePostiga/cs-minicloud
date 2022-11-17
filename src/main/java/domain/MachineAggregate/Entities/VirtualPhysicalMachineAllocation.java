@@ -1,5 +1,8 @@
 package domain.MachineAggregate.Entities;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -23,7 +26,7 @@ public class VirtualPhysicalMachineAllocation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     public VirtualMachine virtualMachine;
 
     @ManyToOne

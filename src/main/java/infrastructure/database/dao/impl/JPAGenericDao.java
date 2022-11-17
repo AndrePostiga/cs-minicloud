@@ -2,12 +2,16 @@ package infrastructure.database.dao.impl;
 
 import infrastructure.database.dao.GenericDao;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 public class JPAGenericDao<T, PK extends Serializable> implements GenericDao<T, PK> {
 

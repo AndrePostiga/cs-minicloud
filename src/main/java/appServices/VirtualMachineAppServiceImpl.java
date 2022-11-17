@@ -53,7 +53,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     @Override
     @Transactional(rollbackFor={Exception.class})
     public VirtualMachine DeleteVirtualMachine(long identificador) throws NotFoundException {
-        VirtualMachine machineToDelete = virtualMachineDao.GetByIdWithLock(identificador);
+        VirtualMachine machineToDelete = virtualMachineDao.GetById(identificador);
         if (machineToDelete == null) {
             throw new NotFoundException("Não foi possível encontrar a máquina de identificador: " + identificador);
         }
@@ -64,25 +64,33 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
 
     @Override
     @Transactional(rollbackFor={Exception.class})
-    public VirtualMachine UpdateVCores(VirtualMachine maquina, int vCores) {
-        return null;
+    public VirtualMachine UpdateVCores(VirtualMachine maquina, int vCores) throws PreconditionFailException {
+        maquina.UpdateVCores(vCores);
+        virtualMachineDao.Update(maquina);
+        return this.GetVirtualMachinesById(maquina.getId());
     }
 
     @Override
     @Transactional(rollbackFor={Exception.class})
-    public VirtualMachine UpdateMemory(VirtualMachine maquina, int memoria) {
-        return null;
+    public VirtualMachine UpdateMemory(VirtualMachine maquina, int memory) throws PreconditionFailException {
+        maquina.UpdateMemory(memory);
+        virtualMachineDao.Update(maquina);
+        return this.GetVirtualMachinesById(maquina.getId());
     }
 
     @Override
     @Transactional(rollbackFor={Exception.class})
-    public VirtualMachine UpdateSSD(VirtualMachine maquina, int ssd) {
-        return null;
+    public VirtualMachine UpdateSSD(VirtualMachine maquina, int ssd) throws PreconditionFailException {
+        maquina.UpdateSsd(ssd);
+        virtualMachineDao.Update(maquina);
+        return this.GetVirtualMachinesById(maquina.getId());
     }
 
     @Override
     @Transactional(rollbackFor={Exception.class})
-    public VirtualMachine UpdateHd(VirtualMachine maquina, int hd) {
-        return null;
+    public VirtualMachine UpdateHd(VirtualMachine maquina, int hd) throws PreconditionFailException {
+        maquina.UpdateHd(hd);
+        virtualMachineDao.Update(maquina);
+        return this.GetVirtualMachinesById(maquina.getId());
     }
 }

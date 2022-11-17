@@ -18,11 +18,11 @@ public interface VirtualMachineAppService {
 
     VirtualMachine DeleteVirtualMachine(long identificador) throws NotFoundException;
 
-    VirtualMachine UpdateVCores(VirtualMachine maquina, int vCores);
+    VirtualMachine UpdateVCores(VirtualMachine maquina, int vCores) throws PreconditionFailException;
 
-    VirtualMachine UpdateMemory(VirtualMachine maquina, int memoria);
+    VirtualMachine UpdateMemory(VirtualMachine maquina, int memoria) throws PreconditionFailException;
 
-    VirtualMachine UpdateSSD(VirtualMachine maquina, int ssd);
+    VirtualMachine UpdateSSD(VirtualMachine maquina, int ssd) throws PreconditionFailException;
 
-    VirtualMachine UpdateHd(VirtualMachine maquina, int hd);
+    VirtualMachine UpdateHd(VirtualMachine maquina, int hd) throws PreconditionFailException;
 }

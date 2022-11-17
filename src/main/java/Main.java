@@ -176,7 +176,9 @@ public class Main {
                 case 4:
                 {
                     List<CPU> cpus = cpuAppService.GetCpus();
-                    cpus.stream().forEach(System.out::println);
+                    for (CPU cpu : cpus) {
+                        System.out.println(cpu);
+                    }
                     break;
                 }
 

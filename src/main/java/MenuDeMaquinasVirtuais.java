@@ -31,6 +31,7 @@ public class MenuDeMaquinasVirtuais {
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
+                System.out.println(ex);
                 return;
             }
 
@@ -52,7 +53,7 @@ public class MenuDeMaquinasVirtuais {
         System.out.println(maquina);
     }
 
-    private static void EditarUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) {
+    private static void EditarUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws PreconditionFailException {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina virtual a ser editada:");
         VirtualMachine maquina = virtualMachineAppService.GetVirtualMachinesById((long) identificador);
         if (maquina == null) {
@@ -60,7 +61,10 @@ public class MenuDeMaquinasVirtuais {
             return;
         }
 
-        System.out.println(maquina);
+        String machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquina Virtual para Editar");
+        machinePrint += maquina.Print();
+        machinePrint += GetTableLine();
+        System.out.println(machinePrint);
 
         System.out.println("O que você deseja alterar?");
         System.out.println("1. vCores");
@@ -85,7 +89,10 @@ public class MenuDeMaquinasVirtuais {
         }
 
         if (maquinaEditada != null) {
-            System.out.println(maquinaEditada);
+            machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquina Virtual Editada");
+            machinePrint += maquinaEditada.Print();
+            machinePrint += GetTableLine();
+            System.out.println(machinePrint);
         }
     }
 
@@ -110,25 +117,45 @@ public class MenuDeMaquinasVirtuais {
                 vCores, arquitetura, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, sistemaOperational, status, maquinaFisicaId
         );
 
-        System.out.println("\n--- Máquina Física Criada ---\n");
-        System.out.println(maquinaCriada);
-        System.out.println("\n--- ---\n");
+        String machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquina Virtual Criada");
+        machinePrint += maquinaCriada.Print();
+        machinePrint += GetTableLine();
+        System.out.println(machinePrint);
     }
 
     private static void ExibeUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina virtual a ser procurada:");
         VirtualMachine maquina = virtualMachineAppService.GetVirtualMachinesById((long) identificador);
-        System.out.println("\n--- Máquina Virtual ---\n");
-        System.out.println(maquina);
-        System.out.println("\n--- ---\n");
+
+        String machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquina Virtual");
+        machinePrint += maquina.Print();
+        machinePrint += GetTableLine();
+        System.out.println(machinePrint);
     }
 
     private static void ExibeTodasAsMaquinasVirtuais(VirtualMachineAppService virtualMachineAppService) {
-        List<VirtualMachine> maquinasFisicas = virtualMachineAppService.GetVirtualMachines();
-        System.out.println("\n--- Máquinas Virtuais existentes ---\n");
-        for (VirtualMachine maquinas : maquinasFisicas) {
-            System.out.println(maquinas);
+        String machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquinas Virtuals");
+
+        List<VirtualMachine> maquinasVirtuais = virtualMachineAppService.GetVirtualMachines();
+        for (VirtualMachine maquina : maquinasVirtuais) {
+            machinePrint += maquina.Print();
         }
-        System.out.println("\n--- ---\n");
+        machinePrint += GetTableLine();
+        System.out.println(machinePrint);
+    }
+
+    private static String GetTableHeader(String title) {
+        String leftAlignFormat = "| %-5d | %-6s | %-6d | %-11s | %-11s | %-11s | %-11s | %-11s | %-19d |%n";
+        String header = "";
+        header += GetTableLine();
+        header += String.format("| %-115s |%n", title);
+        header += String.format("+-------+--------+--------+-------------+-------------+-------------+-------------+-------------+---------------------+%n");
+        header += String.format("| Id    | Status | vCpus  | Arquitetura | Memória     | SSD         | HD          | OS          | Physical Machine Id |%n");
+        header += String.format("+-------+--------+--------+-------------+-------------+-------------+-------------+-----------------------------------+%n");
+        return header;
+    }
+
+    private static String GetTableLine() {
+        return String.format("+---------------------------------------------------------------------------------------------------------------------+%n");
     }
 }

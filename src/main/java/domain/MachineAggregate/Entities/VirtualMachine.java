@@ -4,6 +4,8 @@ import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.Enumerations.VirtualMachineStatusEnum;
 import exceptions.PreconditionFailException;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -13,9 +15,11 @@ import javax.persistence.*;
 })
 @Entity
 @Table(name = "VirtualMachines")
-public class VirtualMachine extends Machine{
+@OnDelete(action = OnDeleteAction.CASCADE)
+public class VirtualMachine extends Machine {
 
-    public VirtualMachine() {}
+    public VirtualMachine() {
+    }
 
     @Column(nullable = false)
     protected int vCores;
@@ -24,7 +28,7 @@ public class VirtualMachine extends Machine{
     @Column(nullable = false)
     private ArchitectureEnum architecture;
 
-    @OneToOne(mappedBy = "virtualMachine", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "virtualMachine", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private VirtualPhysicalMachineAllocation allocation;
 
     @Enumerated(EnumType.STRING)
@@ -50,12 +54,8 @@ public class VirtualMachine extends Machine{
         this.status = status;
         this.architecture = architecture;
 
-        try {
-            this.allocation = physicalMachineToAllocate.Allocate(this);
-        }
-        catch (Exception ex) {
-            throw ex;
-        }
+
+        this.allocation = physicalMachineToAllocate.Allocate(this);
     }
 
     public ArchitectureEnum getArchitecture() {
@@ -70,6 +70,10 @@ public class VirtualMachine extends Machine{
         return status;
     }
 
+    public VirtualPhysicalMachineAllocation getAllocation() {
+        return allocation;
+    }
+
     @Override
     public String toString() {
         return "VirtualMachine{" +
@@ -78,5 +82,71 @@ public class VirtualMachine extends Machine{
                 ", allocation=" + allocation +
                 ", status=" + status +
                 '}';
+    }
+
+    public void UpdateVCores(int vCores) throws PreconditionFailException {
+        if (vCores < 1)
+            throw new PreconditionFailException("vCores não pode ser menor do que 1");
+
+        if (vCores > this.allocation.physicalMachine.cpu.getCores())
+            throw new PreconditionFailException("Não é possível aumentar a quantidade de vCores de forma que tenha mais cores que a máquina física pai");
+
+        this.vCores = vCores;
+    }
+
+    public void UpdateMemory(long memory) throws PreconditionFailException {
+        if (memory < 1)
+            throw new PreconditionFailException("Memória não pode ser menor do que 1");
+
+        long usedMemory = this.allocation.physicalMachine.getMemoryInBytes() - this.allocation.physicalMachine.GetRemainMemoryInBytes();
+        usedMemory -= this.memoryInBytes;
+        if ((memory + usedMemory) > this.allocation.physicalMachine.getMemoryInBytes())
+            throw new PreconditionFailException("Não é possível alocar mais memória do que a máquina fisica pai possui");
+
+        this.memoryInBytes = memory;
+    }
+
+    public void UpdateSsd(long ssd) throws PreconditionFailException {
+        if (ssd < 1)
+            throw new PreconditionFailException("Ssd não pode ser menor do que 1");
+
+        long usedMemory = this.allocation.physicalMachine.getSsdInBytes() - this.allocation.physicalMachine.GetRemainSsdInBytes();
+        usedMemory -= this.ssdInBytes;
+        if ((ssd + usedMemory) > this.allocation.physicalMachine.getSsdInBytes())
+            throw new PreconditionFailException("Não é possível alocar mais ssd do que a máquina fisica pai possui");
+
+        this.ssdInBytes = ssd;
+    }
+
+    public void UpdateHd(long hd) throws PreconditionFailException {
+        if (hd < 1)
+            throw new PreconditionFailException("Hd não pode ser menor do que 1");
+
+        long usedMemory = this.allocation.physicalMachine.getHdInBytes() - this.allocation.physicalMachine.GetRemainHdInBytes();
+        usedMemory -= this.hdInBytes;
+        if ((hd + usedMemory) > this.allocation.physicalMachine.getHdInBytes())
+            throw new PreconditionFailException("Não é possível alocar mais ssd do que a máquina fisica pai possui");
+
+        this.hdInBytes = hd;
+    }
+
+    public void setAllocation(VirtualPhysicalMachineAllocation allocation) {
+        this.allocation = allocation;
+    }
+
+    public String Print() {
+        String leftAlignFormat = "| %-5d | %-6s | %-6d | %-11s | %-11s | %-11s | %-11s | %-11s | %-19d |%n";
+        String printString = String.format(leftAlignFormat,
+                this.getId(),
+                this.getStatus(),
+                this.getvCores(),
+                this.getArchitecture(),
+                this.getMemoryInBytes(),
+                this.getSsdInBytes(),
+                this.getHdInBytes(),
+                this.getOperationalSystem(),
+                this.allocation.physicalMachine.getId());
+
+        return printString;
     }
 }

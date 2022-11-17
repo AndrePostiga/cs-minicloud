@@ -3,6 +3,8 @@ package domain.MachineAggregate.Entities;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.Enumerations.PhysicalMachineStatusEnum;
 import exceptions.PreconditionFailException;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 })
 @Entity
 @Table(name = "PhysicalMachines")
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class PhysicalMachine extends Machine {
 
     public PhysicalMachine() {
@@ -176,6 +179,9 @@ public class PhysicalMachine extends Machine {
     }
 
     public void UpdateCpu(CPU cpu) throws PreconditionFailException {
+        if (cpu == null)
+            throw new PreconditionFailException("Cpu não pode ser nulo");
+
         if (this.allocations == null || this.allocations.stream().count() == 0) {
             this.cpu = cpu;
             return;
@@ -193,6 +199,9 @@ public class PhysicalMachine extends Machine {
     }
 
     public void UpdateMemory(long newMemoryInBytes) throws PreconditionFailException {
+        if (newMemoryInBytes < 1)
+            throw new PreconditionFailException("Memória não pode ser menor do que 1");
+
         long usedMemory = this.memoryInBytes - this.GetRemainMemoryInBytes();
         if (usedMemory > newMemoryInBytes)
             throw new PreconditionFailException("Não é possível atualizar a memória da máquina física pois a nova quantidade de memória é menor do que a quantidade de memória utilizada por sua alocações");
@@ -201,6 +210,9 @@ public class PhysicalMachine extends Machine {
     }
 
     public void UpdateSSD(long newSsdInBytes) throws PreconditionFailException {
+        if (newSsdInBytes < 1)
+            throw new PreconditionFailException("Ssd não pode ser menor do que 1");
+
         long usedMemory = this.ssdInBytes - this.GetRemainSsdInBytes();
         if (usedMemory > newSsdInBytes)
             throw new PreconditionFailException("Não é possível atualizar o ssd da máquina física pois a nova quantidade de ssd é menor do que a quantidade de ssd utilizada por sua alocações");
@@ -209,6 +221,9 @@ public class PhysicalMachine extends Machine {
     }
 
     public void UpdateHD(long newHdInBytes) throws PreconditionFailException {
+        if (newHdInBytes < 1)
+            throw new PreconditionFailException("Hd não pode ser menor do que 1");
+
         long usedMemory = this.hdInBytes - this.GetRemainHdInBytes();
         if (usedMemory > newHdInBytes)
             throw new PreconditionFailException("Não é possível atualizar o hd da máquina física pois a nova quantidade de hd é menor do que a quantidade de hd utilizada por sua alocações");
@@ -228,14 +243,5 @@ public class PhysicalMachine extends Machine {
         }
 
         this.operationalSystem = newOperationalSystem;
-    }
-
-    @Override
-    public String toString() {
-        return "PhysicalMachine{" +
-                "cpu=" + cpu +
-                ", allocations=" + allocations +
-                ", status=" + status +
-                '}';
     }
 }
