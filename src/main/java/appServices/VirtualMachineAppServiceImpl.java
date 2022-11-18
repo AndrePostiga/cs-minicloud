@@ -58,7 +58,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
             throw new NotFoundException("Não foi possível encontrar a máquina de identificador: " + identificador);
         }
 
-        virtualMachineDao.Delete(machineToDelete);
+        virtualMachineDao.RemoveAllocation(machineToDelete);
         return machineToDelete;
     }
 

@@ -1,5 +1,6 @@
 package domain.MachineAggregate.Entities;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -26,7 +27,7 @@ public class VirtualPhysicalMachineAllocation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToOne
     public VirtualMachine virtualMachine;
 
     @ManyToOne
@@ -86,6 +87,10 @@ public class VirtualPhysicalMachineAllocation {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

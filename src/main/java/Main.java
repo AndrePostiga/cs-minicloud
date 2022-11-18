@@ -1,17 +1,13 @@
 import appServices.CpuAppService;
-import appServices.CpuAppServiceImpl;
 import appServices.PhysicalMachineAppService;
 import appServices.VirtualMachineAppService;
 import corejava.Console;
-import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.CPU;
+import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
@@ -47,7 +43,6 @@ public class Main {
         System.out.println("1 - Menu de CPUS");
         System.out.println("2 - Menu de Máquinas Físicas");
         System.out.println("3 - Menu de Máquinas Virtuais");
-        System.out.println("4 - Alocações");
         System.out.println("0 - Sair \n ");
         escolha = Console.readInt('\n' + "Digite uma opção:");
         return escolha;

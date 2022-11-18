@@ -8,4 +8,6 @@ import java.util.List;
 public interface VirtualMachineDao extends GenericDao<VirtualMachine, Long>{
     @RecuperaLista
     List<VirtualMachine> GetAll();
+
+    void RemoveAllocation(VirtualMachine virtualMachine);
 }

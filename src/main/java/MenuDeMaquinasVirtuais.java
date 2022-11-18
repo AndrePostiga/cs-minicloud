@@ -3,7 +3,6 @@ import corejava.Console;
 import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.Enumerations.VirtualMachineStatusEnum;
-import domain.MachineAggregate.Entities.PhysicalMachine;
 import domain.MachineAggregate.Entities.VirtualMachine;
 import exceptions.PreconditionFailException;
 import javassist.NotFoundException;
@@ -50,7 +49,11 @@ public class MenuDeMaquinasVirtuais {
     private static void RemoverUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws NotFoundException {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina virtual a ser deletada:");
         VirtualMachine maquina = virtualMachineAppService.DeleteVirtualMachine((long) identificador);
-        System.out.println(maquina);
+
+        String machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquina Virtual Removida");
+        machinePrint += maquina.Print();
+        machinePrint += GetTableLine();
+        System.out.println(machinePrint);
     }
 
     private static void EditarUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws PreconditionFailException {
@@ -100,15 +103,15 @@ public class MenuDeMaquinasVirtuais {
         System.out.println("\n");
 
         int vCores = Console.readInt("Digite a quantidade de vCpus que a máquina irá utilizar:");
-        String arquiteturaString = Console.readLine('\n' + "Informe a arquitetura do vCore (ARM, X86, X86_64): ");
+        String arquiteturaString = Console.readLine("Informe a arquitetura do vCore (ARM, X86, X86_64): ");
         ArchitectureEnum arquitetura = ArchitectureEnum.valueOf(arquiteturaString);
         long memoryInBytes = Console.readInt("Digite a quantidade de memória ram em Bytes:");
-        boolean hasGpu = Console.readLine("Sua máquina física terá GPU? (s/n):") == "s";
+        boolean hasGpu = false;
         long ssdInBytes = Console.readInt("Digite a quantidade de memória ssd em Bytes:");
         long hdInBytes = Console.readInt("Digite a quantidade de memória hd em Bytes:");
         String sistemaOperationalString = Console.readLine("Digite o SO da máquina (Windows, WindowsServer, MacOs, Ubuntu, CentOs): ");
         OperationalSystemEnum sistemaOperational = OperationalSystemEnum.valueOf(sistemaOperationalString);
-        String statusString = Console.readLine('\n' + "Informe o status inicial da máquina (On, Off, Iddle): ");
+        String statusString = Console.readLine("Informe o status inicial da máquina (On, Off, Iddle): ");
         VirtualMachineStatusEnum status = VirtualMachineStatusEnum.valueOf(statusString);
         long maquinaFisicaId = Console.readInt("Digite o id da máquina física que a máquina virtual será alocada:");
 

@@ -4,6 +4,7 @@ import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.Enumerations.VirtualMachineStatusEnum;
 import exceptions.PreconditionFailException;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -28,7 +29,7 @@ public class VirtualMachine extends Machine {
     @Column(nullable = false)
     private ArchitectureEnum architecture;
 
-    @OneToOne(mappedBy = "virtualMachine", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "virtualMachine", fetch = FetchType.EAGER)
     private VirtualPhysicalMachineAllocation allocation;
 
     @Enumerated(EnumType.STRING)
@@ -128,10 +129,6 @@ public class VirtualMachine extends Machine {
             throw new PreconditionFailException("Não é possível alocar mais ssd do que a máquina fisica pai possui");
 
         this.hdInBytes = hd;
-    }
-
-    public void setAllocation(VirtualPhysicalMachineAllocation allocation) {
-        this.allocation = allocation;
     }
 
     public String Print() {
