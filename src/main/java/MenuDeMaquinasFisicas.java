@@ -29,6 +29,8 @@ public class MenuDeMaquinasFisicas {
                     MenuDeMaquinasFisicas.EditaUmaMaquinaFisica(physicalMachineAppService);
                 } else if (escolha == 7) {
                     MenuDeMaquinasFisicas.RemoveMaquinaFisica(physicalMachineAppService);
+                } else if (escolha == 0) {
+                    return;
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -106,9 +108,11 @@ public class MenuDeMaquinasFisicas {
         }
     }
 
-    private static void ExibeUmaMaquinaFisicaComAlocacoes(PhysicalMachineAppService physicalMachineAppService) {
+    private static void ExibeUmaMaquinaFisicaComAlocacoes(PhysicalMachineAppService physicalMachineAppService) throws NotFoundException {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina física a ser procurada:");
         PhysicalMachine maquina = physicalMachineAppService.GetPhysicalMachinesById((long) identificador);
+        if (maquina == null)
+            throw new NotFoundException("Não foi encontrada uma máquina com identificador: " + identificador);
 
         String physicalMachinePrint = MenuDeMaquinasFisicas.GetTableHeader("Máquina Física");
         physicalMachinePrint += maquina.PrintPhysicalMachine();
@@ -134,14 +138,13 @@ public class MenuDeMaquinasFisicas {
 
         long cpuId = Console.readInt("Digite o id do CPU que a máquina irá utilizar:");
         long memoryInBytes = Console.readInt("Digite a quantidade de memória ram em Bytes:");
-        boolean hasGpu = Console.readLine("Sua máquina física terá GPU? (s/n):") == "s";
         long ssdInBytes = Console.readInt("Digite a quantidade de memória ssd em Bytes:");
         long hdInBytes = Console.readInt("Digite a quantidade de memória hd em Bytes:");
         String sistemaOperationalString = Console.readLine("Digite o SO da máquina (Windows, WindowsServer, MacOs, Ubuntu, CentOs): ");
         OperationalSystemEnum sistemaOperational = OperationalSystemEnum.valueOf(sistemaOperationalString);
 
         PhysicalMachine maquinaCriada;
-        maquinaCriada = physicalMachineAppService.CreatePhysicalMachine(cpuId, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, sistemaOperational);
+        maquinaCriada = physicalMachineAppService.CreatePhysicalMachine(cpuId, memoryInBytes, ssdInBytes, hdInBytes, sistemaOperational);
 
         String physicalMachinePrint = MenuDeMaquinasFisicas.GetTableHeader("Máquina Física Criada");
         physicalMachinePrint += maquinaCriada.PrintPhysicalMachine();
@@ -149,9 +152,11 @@ public class MenuDeMaquinasFisicas {
         System.out.println(physicalMachinePrint);
     }
 
-    private static void ExibeUmaMaquinaFisica(PhysicalMachineAppService physicalMachineAppService) {
+    private static void ExibeUmaMaquinaFisica(PhysicalMachineAppService physicalMachineAppService) throws NotFoundException {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina física a ser procurada:");
         PhysicalMachine maquina = physicalMachineAppService.GetPhysicalMachinesById((long) identificador);
+        if (maquina == null)
+            throw new NotFoundException("Não foi encontrada uma máquina com identificador: " + identificador);
 
         String physicalMachinePrint = MenuDeMaquinasFisicas.GetTableHeader("Máquina Física");
         physicalMachinePrint += maquina.PrintPhysicalMachine();

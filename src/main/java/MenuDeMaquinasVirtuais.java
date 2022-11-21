@@ -27,6 +27,8 @@ public class MenuDeMaquinasVirtuais {
                     MenuDeMaquinasVirtuais.EditarUmaMaquinaVirtual(virtualMachineAppService);
                 } else if (escolha == 5) {
                     MenuDeMaquinasVirtuais.RemoverUmaMaquinaVirtual(virtualMachineAppService);
+                } else if (escolha == 0) {
+                    return;
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -106,7 +108,6 @@ public class MenuDeMaquinasVirtuais {
         String arquiteturaString = Console.readLine("Informe a arquitetura do vCore (ARM, X86, X86_64): ");
         ArchitectureEnum arquitetura = ArchitectureEnum.valueOf(arquiteturaString);
         long memoryInBytes = Console.readInt("Digite a quantidade de memória ram em Bytes:");
-        boolean hasGpu = false;
         long ssdInBytes = Console.readInt("Digite a quantidade de memória ssd em Bytes:");
         long hdInBytes = Console.readInt("Digite a quantidade de memória hd em Bytes:");
         String sistemaOperationalString = Console.readLine("Digite o SO da máquina (Windows, WindowsServer, MacOs, Ubuntu, CentOs): ");
@@ -117,7 +118,7 @@ public class MenuDeMaquinasVirtuais {
 
         VirtualMachine maquinaCriada;
         maquinaCriada = virtualMachineAppService.CreateVirtualMachine(
-                vCores, arquitetura, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, sistemaOperational, status, maquinaFisicaId
+                vCores, arquitetura, memoryInBytes, ssdInBytes, hdInBytes, sistemaOperational, status, maquinaFisicaId
         );
 
         String machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquina Virtual Criada");
@@ -126,9 +127,11 @@ public class MenuDeMaquinasVirtuais {
         System.out.println(machinePrint);
     }
 
-    private static void ExibeUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) {
+    private static void ExibeUmaMaquinaVirtual(VirtualMachineAppService virtualMachineAppService) throws NotFoundException {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina virtual a ser procurada:");
         VirtualMachine maquina = virtualMachineAppService.GetVirtualMachinesById((long) identificador);
+        if (maquina == null)
+            throw new NotFoundException("Não foi encontrada uma máquina virtual com identificador: " + identificador);
 
         String machinePrint = MenuDeMaquinasVirtuais.GetTableHeader("Máquina Virtual");
         machinePrint += maquina.Print();

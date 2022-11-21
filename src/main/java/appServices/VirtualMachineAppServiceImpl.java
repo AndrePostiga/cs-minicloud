@@ -38,7 +38,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     @Override
     @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional
-    public VirtualMachine CreateVirtualMachine(int vCores, ArchitectureEnum arquitetura, long memoryInBytes, boolean hasGpu, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational, VirtualMachineStatusEnum status, long physicalMachineId) throws NotFoundException, PreconditionFailException {
+    public VirtualMachine CreateVirtualMachine(int vCores, ArchitectureEnum arquitetura, long memoryInBytes, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational, VirtualMachineStatusEnum status, long physicalMachineId) throws NotFoundException, PreconditionFailException {
 
         PhysicalMachine physicalMachine = physicalMachineAppService.GetPhysicalMachinesById(physicalMachineId);
         if (physicalMachine == null) {
@@ -46,7 +46,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
         }
 
         try {
-            VirtualMachine virtualMachine = VirtualMachine.CreateVirtualMachine(vCores, arquitetura, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, sistemaOperational, status, physicalMachine);
+            VirtualMachine virtualMachine = VirtualMachine.CreateVirtualMachine(vCores, arquitetura, memoryInBytes, ssdInBytes, hdInBytes, sistemaOperational, status, physicalMachine);
             return virtualMachineDao.Create(virtualMachine);
         }
         catch (PreconditionFailException ex) {

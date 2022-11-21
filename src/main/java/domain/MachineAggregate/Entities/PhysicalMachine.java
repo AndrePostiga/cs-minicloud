@@ -30,13 +30,13 @@ public class PhysicalMachine extends Machine {
     @Enumerated(EnumType.STRING)
     private PhysicalMachineStatusEnum status;
 
-    public static PhysicalMachine CreatePhysicalMachine(CPU cpu, Long memoryInBytes, Boolean hasGpu, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem) {
+    public static PhysicalMachine CreatePhysicalMachine(CPU cpu, Long memoryInBytes, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem) {
         PhysicalMachineStatusEnum status = PhysicalMachineStatusEnum.Free;
-        return new PhysicalMachine(cpu, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, operationalSystem, status);
+        return new PhysicalMachine(cpu, memoryInBytes, ssdInBytes, hdInBytes, operationalSystem, status);
     }
 
-    private PhysicalMachine(CPU cpu, Long memoryInBytes, Boolean hasGpu, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem, PhysicalMachineStatusEnum status) {
-        super(memoryInBytes, hasGpu, ssdInBytes, hdInBytes, operationalSystem);
+    private PhysicalMachine(CPU cpu, Long memoryInBytes, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem, PhysicalMachineStatusEnum status) {
+        super(memoryInBytes, ssdInBytes, hdInBytes, operationalSystem);
 
         if (cpu == null)
             throw new IllegalArgumentException("Não é possível criar uma máquina física sem cpu");
@@ -100,9 +100,6 @@ public class PhysicalMachine extends Machine {
 
         if (this.cpu.getCores() < machine.getvCores())
             throw new PreconditionFailException("Quantidade de vCores da máquina virtual excede a quantidade de cores disponíveis na máquina física solicitada, máquina física: " + this.cpu.getCores() + " máquina virtual: " + machine.getvCores());
-
-        if (this.getHasGpu() != machine.getHasGpu())
-            throw new PreconditionFailException("Gpu solicitado para máquina virtual não está presente na máquina física solicitada, máquina física: " + this.getHasGpu() + " máquina virtual: " + machine.getHasGpu());
 
         if (this.getOperationalSystem() != machine.getOperationalSystem())
             throw new PreconditionFailException("Sistema operacional da máquina virtual diverge do sistema da máquina física solicitada, máquina física: " + this.getOperationalSystem() + " máquina virtual: " + machine.getOperationalSystem());
