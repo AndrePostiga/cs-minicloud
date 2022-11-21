@@ -15,27 +15,6 @@ public class CpuAppServiceImpl implements CpuAppService {
     private CPUDao cpuDAO;
 
     @Override
-    @Transactional
-    public CPU Include(CPU cpu) {
-        CPU createCpu = cpuDAO.Create(cpu);
-        return createCpu;
-    }
-
-    @Override
-    @Transactional (rollbackFor={Exception.class})
-    public CPU Update(Long id, CPU cpu) {
-        cpuDAO.Update(cpu);
-        return cpuDAO.GetById(id);
-    }
-
-    @Override
-    @Transactional (rollbackFor={Exception.class})
-    public void Delete(Long id) {
-        CPU cpu = cpuDAO.GetById(id);
-        cpuDAO.Delete(cpu);
-    }
-
-    @Override
     public CPU GetById(Long id) {
         return cpuDAO.GetById(id);
     }

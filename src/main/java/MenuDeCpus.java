@@ -1,9 +1,7 @@
 import appServices.CpuAppService;
-import appServices.PhysicalMachineAppService;
 import corejava.Console;
 import domain.MachineAggregate.Entities.CPU;
 import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
-import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import javassist.NotFoundException;
 
 import java.util.List;
