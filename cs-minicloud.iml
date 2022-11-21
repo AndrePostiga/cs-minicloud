@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="AspectJ" name="AspectJ">
+      <configuration>
+        <option name="aspectPath">
+          <projectLibrary>
+            <option name="name" value="Maven: org.aspectj:aspectjrt:1.8.9" />
+          </projectLibrary>
+          <projectLibrary>
+            <option name="name" value="Maven: org.aspectj:aspectjweaver:1.8.2" />
+          </projectLibrary>
+          <projectLibrary>
+            <option name="name" value="Maven: org.aspectj:aspectjtools:1.9.1" />
+          </projectLibrary>
+        </option>
+      </configuration>
+    </facet>
+  </component>
+</module>

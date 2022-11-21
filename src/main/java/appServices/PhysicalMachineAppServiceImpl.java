@@ -1,8 +1,10 @@
 package appServices;
 
+import annotation.Perfis;
 import domain.MachineAggregate.Entities.CPU;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.PhysicalMachine;
+import domain.ProfileAggregate.Enumerations.ProfilesEnum;
 import exceptions.PreconditionFailException;
 import infrastructure.database.dao.PhysicalMachineDao;
 import javassist.NotFoundException;
@@ -20,16 +22,19 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     private CpuAppService cpuAppService;
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator, ProfilesEnum.User})
     public List<PhysicalMachine> GetPhysicalMachines() {
         return physicalMachineDao.GetAll();
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator, ProfilesEnum.User})
     public PhysicalMachine GetPhysicalMachinesById(Long id) {
         return physicalMachineDao.GetById(id);
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional
     public PhysicalMachine CreatePhysicalMachine(long cpuId, long memoryInBytes, boolean hasGpu, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational) throws NotFoundException {
         CPU cpu = cpuAppService.GetById(cpuId);
@@ -43,6 +48,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public PhysicalMachine DeletePhysicalMachine(long identificador) throws NotFoundException, PreconditionFailException {
         PhysicalMachine physicalMachineToDelete = physicalMachineDao.GetByIdWithLock(identificador);
@@ -59,6 +65,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public PhysicalMachine UpdateCpu(PhysicalMachine maquina, int cpuId) throws NotFoundException, PreconditionFailException {
         CPU cpu = cpuAppService.GetById(new Long(cpuId));
@@ -72,6 +79,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public PhysicalMachine UpdateMemory(PhysicalMachine maquina, long memoria) throws PreconditionFailException {
         maquina.UpdateMemory(memoria);
@@ -80,6 +88,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public PhysicalMachine UpdateSSD(PhysicalMachine maquina, long ssd) throws PreconditionFailException {
         maquina.UpdateSSD(ssd);
@@ -88,6 +97,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public PhysicalMachine UpdateHd(PhysicalMachine maquina, long hd) throws PreconditionFailException {
         maquina.UpdateHD(hd);
@@ -96,6 +106,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public PhysicalMachine UpdateOperationalSystem(PhysicalMachine maquina, OperationalSystemEnum sistemaOperational) throws PreconditionFailException {
         maquina.UpdateOperationalSystem(sistemaOperational);

@@ -1,10 +1,12 @@
 package appServices;
 
+import annotation.Perfis;
 import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.Enumerations.VirtualMachineStatusEnum;
 import domain.MachineAggregate.Entities.PhysicalMachine;
 import domain.MachineAggregate.Entities.VirtualMachine;
+import domain.ProfileAggregate.Enumerations.ProfilesEnum;
 import exceptions.PreconditionFailException;
 import infrastructure.database.dao.VirtualMachineDao;
 import javassist.NotFoundException;
@@ -22,16 +24,19 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     private PhysicalMachineAppService physicalMachineAppService;
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator, ProfilesEnum.User})
     public VirtualMachine GetVirtualMachinesById(long id) {
         return virtualMachineDao.GetById(id);
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator, ProfilesEnum.User})
     public List<VirtualMachine> GetVirtualMachines() {
         return virtualMachineDao.GetAll();
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional
     public VirtualMachine CreateVirtualMachine(int vCores, ArchitectureEnum arquitetura, long memoryInBytes, boolean hasGpu, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational, VirtualMachineStatusEnum status, long physicalMachineId) throws NotFoundException, PreconditionFailException {
 
@@ -51,6 +56,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public VirtualMachine DeleteVirtualMachine(long identificador) throws NotFoundException {
         VirtualMachine machineToDelete = virtualMachineDao.GetById(identificador);
@@ -63,6 +69,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public VirtualMachine UpdateVCores(VirtualMachine maquina, int vCores) throws PreconditionFailException {
         maquina.UpdateVCores(vCores);
@@ -71,6 +78,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public VirtualMachine UpdateMemory(VirtualMachine maquina, int memory) throws PreconditionFailException {
         maquina.UpdateMemory(memory);
@@ -79,6 +87,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public VirtualMachine UpdateSSD(VirtualMachine maquina, int ssd) throws PreconditionFailException {
         maquina.UpdateSsd(ssd);
@@ -87,6 +96,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     }
 
     @Override
+    @Perfis(nomes = {ProfilesEnum.Administrator})
     @Transactional(rollbackFor={Exception.class})
     public VirtualMachine UpdateHd(VirtualMachine maquina, int hd) throws PreconditionFailException {
         maquina.UpdateHd(hd);
