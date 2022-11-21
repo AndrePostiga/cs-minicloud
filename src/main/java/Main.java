@@ -19,7 +19,6 @@ public class Main {
         do {
 
             if (escolha == 1){
-                //Main.exibeMenuDeCpus(cpuAppService);
                 MenuDeCpus.ExibeMenuDeCPUs(cpuAppService);
             }
             else if (escolha == 2){

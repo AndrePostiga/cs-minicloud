@@ -24,6 +24,8 @@ public class MenuDeCpus {
                     MenuDeCpus.ExibeTodosOsCpus(cpuAppService);
                 } else if (escolha == 5) {
                     MenuDeCpus.ExibeUmCpu(cpuAppService);
+                } else if (escolha == 0) {
+                    return;
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -81,10 +83,13 @@ public class MenuDeCpus {
         }
     }
 
-    private static void ExibeUmCpu(CpuAppService cpuAppService) {
+    private static void ExibeUmCpu(CpuAppService cpuAppService) throws NotFoundException {
         System.out.println();
         int id = Console.readInt("Digite o identificador do CPU a ser procurado:");
         CPU cpu = cpuAppService.GetById((long) id);
+        if (cpu == null)
+            throw new NotFoundException("Não foi encontrada um cpu com identificador: " + id);
+
         System.out.println(cpu);
         System.out.println();
     }

@@ -36,16 +36,16 @@ public class VirtualMachine extends Machine {
     private VirtualMachineStatusEnum status;
 
     public static VirtualMachine CreateVirtualMachine(
-            int vCores, ArchitectureEnum architecture, Long memoryInBytes, Boolean hasGpu, Long ssdInBytes,
+            int vCores, ArchitectureEnum architecture, Long memoryInBytes, Long ssdInBytes,
             Long hdInBytes, OperationalSystemEnum operationalSystem, VirtualMachineStatusEnum status,
             PhysicalMachine physicalMachineToAllocate
     ) throws PreconditionFailException {
-        VirtualMachine machine = new VirtualMachine(vCores, architecture, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, operationalSystem, status, physicalMachineToAllocate);
+        VirtualMachine machine = new VirtualMachine(vCores, architecture, memoryInBytes, ssdInBytes, hdInBytes, operationalSystem, status, physicalMachineToAllocate);
         return machine;
     }
 
-    public VirtualMachine(int vCores, ArchitectureEnum architecture, Long memoryInBytes, Boolean hasGpu, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem, VirtualMachineStatusEnum status, PhysicalMachine physicalMachineToAllocate) throws PreconditionFailException {
-        super(memoryInBytes, hasGpu, ssdInBytes, hdInBytes, operationalSystem);
+    public VirtualMachine(int vCores, ArchitectureEnum architecture, Long memoryInBytes, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem, VirtualMachineStatusEnum status, PhysicalMachine physicalMachineToAllocate) throws PreconditionFailException {
+        super(memoryInBytes, ssdInBytes, hdInBytes, operationalSystem);
 
         if (vCores < 0) {
             throw new IllegalArgumentException("Não é possível criar uma máquina virtual sem vCores");

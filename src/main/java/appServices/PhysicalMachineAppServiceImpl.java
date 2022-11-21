@@ -31,13 +31,13 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
 
     @Override
     @Transactional
-    public PhysicalMachine CreatePhysicalMachine(long cpuId, long memoryInBytes, boolean hasGpu, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational) throws NotFoundException {
+    public PhysicalMachine CreatePhysicalMachine(long cpuId, long memoryInBytes, long ssdInBytes, long hdInBytes, OperationalSystemEnum sistemaOperational) throws NotFoundException {
         CPU cpu = cpuAppService.GetById(cpuId);
         if (cpu == null) {
             throw new NotFoundException("Não foi possível encontrar o cpu de identificador: " + cpuId);
         }
 
-        PhysicalMachine maquinaFisica = PhysicalMachine.CreatePhysicalMachine(cpu, memoryInBytes, hasGpu, ssdInBytes, hdInBytes, sistemaOperational);
+        PhysicalMachine maquinaFisica = PhysicalMachine.CreatePhysicalMachine(cpu, memoryInBytes, ssdInBytes, hdInBytes, sistemaOperational);
         PhysicalMachine maquinaFisicaCriada = physicalMachineDao.Create(maquinaFisica);
         return maquinaFisicaCriada;
     }

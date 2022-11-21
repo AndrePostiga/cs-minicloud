@@ -16,9 +16,6 @@ public abstract class Machine {
     @Column(nullable = false)
     protected Long memoryInBytes;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    protected Boolean hasGpu;
-
     protected Long ssdInBytes;
 
     protected Long hdInBytes;
@@ -28,7 +25,7 @@ public abstract class Machine {
 
     protected Machine() {}
 
-    protected Machine(Long memoryInBytes, Boolean hasGpu, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem) {
+    protected Machine(Long memoryInBytes, Long ssdInBytes, Long hdInBytes, OperationalSystemEnum operationalSystem) {
         if (memoryInBytes == 0)
             throw new IllegalArgumentException("Não é possível criar uma máquina física sem memória ram");
 
@@ -37,7 +34,6 @@ public abstract class Machine {
 
 
         this.memoryInBytes = memoryInBytes;
-        this.hasGpu = hasGpu;
         this.ssdInBytes = ssdInBytes;
         this.hdInBytes = hdInBytes;
         this.operationalSystem = operationalSystem;
@@ -53,10 +49,6 @@ public abstract class Machine {
 
     public Long getHdInBytes() {
         return hdInBytes;
-    }
-
-    public Boolean getHasGpu() {
-        return hasGpu;
     }
 
     public OperationalSystemEnum getOperationalSystem() {
