@@ -4,15 +4,18 @@ import domain.MachineAggregate.Entities.Enumerations.ArchitectureEnum;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.Enumerations.VirtualMachineStatusEnum;
 import exceptions.PreconditionFailException;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @NamedQueries({
-        @NamedQuery(name = "VirtualMachine.GetAll", query = "select p from VirtualMachine p order by p.id"),
-        @NamedQuery(name = "VirtualMachine.GetById", query = "select p from VirtualMachine p where p.id = ?1")
+        @NamedQuery(name = "VirtualMachine.GetAll", query = "select p from VirtualMachine p " +
+                "left outer join fetch p.allocation " +
+                "order by p.id"),
+        @NamedQuery(name = "VirtualMachine.GetByIdFetch", query = "select p from VirtualMachine p " +
+                "left outer join fetch p.allocation " +
+                "where p.id = ?1")
 })
 @Entity
 @Table(name = "VirtualMachines")
@@ -29,7 +32,7 @@ public class VirtualMachine extends Machine {
     @Column(nullable = false)
     private ArchitectureEnum architecture;
 
-    @OneToOne(mappedBy = "virtualMachine", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "virtualMachine", fetch = FetchType.LAZY)
     private VirtualPhysicalMachineAllocation allocation;
 
     @Enumerated(EnumType.STRING)

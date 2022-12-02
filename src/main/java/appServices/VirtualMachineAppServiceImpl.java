@@ -26,7 +26,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
     @Override
     @Perfis(nomes = {ProfilesEnum.Administrator, ProfilesEnum.User})
     public VirtualMachine GetVirtualMachinesById(long id) {
-        return virtualMachineDao.GetById(id);
+        return virtualMachineDao.GetByIdFetch(id);
     }
 
     @Override

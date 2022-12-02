@@ -30,7 +30,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
     @Override
     @Perfis(nomes = {ProfilesEnum.Administrator, ProfilesEnum.User})
     public PhysicalMachine GetPhysicalMachinesById(Long id) {
-        return physicalMachineDao.GetById(id);
+        return physicalMachineDao.GetByIdFetch(id);
     }
 
     @Override

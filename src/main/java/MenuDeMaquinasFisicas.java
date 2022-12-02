@@ -1,11 +1,12 @@
 import appServices.PhysicalMachineAppService;
 import corejava.Console;
-import domain.MachineAggregate.Entities.CPU;
 import domain.MachineAggregate.Entities.Enumerations.OperationalSystemEnum;
 import domain.MachineAggregate.Entities.PhysicalMachine;
 import exceptions.PreconditionFailException;
 import javassist.NotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class MenuDeMaquinasFisicas {
@@ -32,7 +33,11 @@ public class MenuDeMaquinasFisicas {
                 } else if (escolha == 0) {
                     return;
                 }
-            } catch (Exception ex) {
+            }
+            catch (NoResultException | EmptyResultDataAccessException ex) {
+                System.out.println("Não foi possível encontrar o recurso solicitado, tente novamente.");
+            }
+            catch (Exception ex) {
                 System.out.println(ex.getMessage());
                 return;
             }
@@ -110,7 +115,9 @@ public class MenuDeMaquinasFisicas {
 
     private static void ExibeUmaMaquinaFisicaComAlocacoes(PhysicalMachineAppService physicalMachineAppService) throws NotFoundException {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina física a ser procurada:");
+
         PhysicalMachine maquina = physicalMachineAppService.GetPhysicalMachinesById((long) identificador);
+
         if (maquina == null)
             throw new NotFoundException("Não foi encontrada uma máquina com identificador: " + identificador);
 
@@ -154,6 +161,7 @@ public class MenuDeMaquinasFisicas {
 
     private static void ExibeUmaMaquinaFisica(PhysicalMachineAppService physicalMachineAppService) throws NotFoundException {
         int identificador = Console.readInt('\n' + "Digite o identificador da máquina física a ser procurada:");
+
         PhysicalMachine maquina = physicalMachineAppService.GetPhysicalMachinesById((long) identificador);
         if (maquina == null)
             throw new NotFoundException("Não foi encontrada uma máquina com identificador: " + identificador);
