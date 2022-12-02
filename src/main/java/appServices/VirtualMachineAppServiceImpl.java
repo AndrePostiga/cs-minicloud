@@ -23,7 +23,7 @@ public class VirtualMachineAppServiceImpl implements VirtualMachineAppService {
 
     @Override
     public VirtualMachine GetVirtualMachinesById(long id) {
-        return virtualMachineDao.GetById(id);
+        return virtualMachineDao.GetByIdFetch(id);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class PhysicalMachineAppServiceImpl implements PhysicalMachineAppService 
 
     @Override
     public PhysicalMachine GetPhysicalMachinesById(Long id) {
-        return physicalMachineDao.GetById(id);
+        return physicalMachineDao.GetByIdFetch(id);
     }
 
     @Override

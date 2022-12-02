@@ -6,7 +6,9 @@ import domain.MachineAggregate.Entities.Enumerations.VirtualMachineStatusEnum;
 import domain.MachineAggregate.Entities.VirtualMachine;
 import exceptions.PreconditionFailException;
 import javassist.NotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class MenuDeMaquinasVirtuais {
@@ -30,7 +32,11 @@ public class MenuDeMaquinasVirtuais {
                 } else if (escolha == 0) {
                     return;
                 }
-            } catch (Exception ex) {
+            }
+            catch (NoResultException | EmptyResultDataAccessException ex) {
+                System.out.println("Não foi possível encontrar o recurso solicitado, tente novamente.");
+            }
+            catch (Exception ex) {
                 System.out.println(ex.getMessage());
                 System.out.println(ex);
                 return;

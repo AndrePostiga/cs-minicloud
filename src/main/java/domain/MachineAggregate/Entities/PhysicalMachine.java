@@ -10,8 +10,15 @@ import javax.persistence.*;
 import java.util.List;
 
 @NamedQueries({
-        @NamedQuery(name = "PhysicalMachine.GetAll", query = "select p from PhysicalMachine p order by p.id"),
-        @NamedQuery(name = "PhysicalMachine.GetById", query = "select p from PhysicalMachine p where p.id = ?1")
+        @NamedQuery(name = "PhysicalMachine.GetAll", query = "select p from PhysicalMachine p " +
+                "left outer join fetch p.allocations " +
+                "left outer join fetch p.cpu " +
+                "order by p.id"),
+
+        @NamedQuery(name = "PhysicalMachine.GetByIdFetch", query = "select p from PhysicalMachine p " +
+                "left outer join fetch p.allocations " +
+                "left outer join fetch p.cpu " +
+                "where p.id = ?1")
 })
 @Entity
 @Table(name = "PhysicalMachines")
@@ -24,7 +31,7 @@ public class PhysicalMachine extends Machine {
     @ManyToOne(optional = false)
     protected CPU cpu;
 
-    @OneToMany(mappedBy = "physicalMachine", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "physicalMachine", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<VirtualPhysicalMachineAllocation> allocations;
 
     @Enumerated(EnumType.STRING)
